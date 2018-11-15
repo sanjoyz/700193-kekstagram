@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр](https://up.htmlacademy.ru/javascript/16/user/700193).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Закурдаев](https://up.htmlacademy.ru/javascript/16/user/25657).
 
 ---
 
