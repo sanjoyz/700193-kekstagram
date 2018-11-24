@@ -1,7 +1,7 @@
 'use strict';
 var LIKES_MIN = 15;
 var LIKES_MAX = 200;
-
+var MAX_PHOTOS = 25;
 
 //  url: 'photos/' + index + '.jpg', // {{i}} - 1-25
 //  likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
@@ -31,7 +31,7 @@ var getRandomComment = function (array) {
     var randomComment = '' + array[getRandomNumber(0, array.length - 1)] + ' ' + array[getRandomNumber(0, array.length - 1)];
     return randomComment;
   } else {
-    randomComment = array[getRandomNumber(0, 5)];
+    randomComment = array[getRandomNumber(0, array.length - 1)];
     return randomComment;
   }
 };
@@ -41,34 +41,73 @@ var getRandomDescription = function (array) {
 };
 
 
-var photos = [
+var makePhotosArray = function (photosQuantity) {
+  var photos = [];
+  for (var i = 1; i < photosQuantity + 1; i++) {
+    var photo = {
+      url: i,
+      likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
+      comments: getRandomComment(commentsArray),
+      description: getRandomDescription(descriptionsArray)
+    };
+    photos.push(photo);
+  }
+  return photos;
+};
+var photos = makePhotosArray(MAX_PHOTOS);
+/* [
   {
-    url: 'photos/' + '.jpg',
-    likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
-    commentsArray: getRandomComment(commentsArray),
+    url: 1,
+    likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
+    comments: getRandomComment(commentsArray),
     description: getRandomDescription(descriptionsArray)
   },
   {
-    url: 'photos/' + '.jpg',
-    likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
-    commentsArray: getRandomComment(commentsArray),
+    url: 2,
+    likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
+    comments: getRandomComment(commentsArray),
     description: getRandomDescription(descriptionsArray)
   },
   {
-    url: 'photos/' + '.jpg',
-    likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
-    commentsArray: getRandomComment(commentsArray),
+    url: 3,
+    likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
+    comments: getRandomComment(commentsArray),
     description: getRandomDescription(descriptionsArray)
   },
   {
-    url: 'photos/' + '.jpg',
-    likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
-    commentsArray: getRandomComment(commentsArray),
+    url: 4,
+    likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
+    comments: getRandomComment(commentsArray),
+    description: getRandomDescription(descriptionsArray)
+  },
+  {
+    url: 5,
+    likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
+    comments: getRandomComment(commentsArray),
+    description: getRandomDescription(descriptionsArray)
+  },
+  {
+    url: 6,
+    likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
+    comments: getRandomComment(commentsArray),
     description: getRandomDescription(descriptionsArray)
   }
-];
 
-console.log(photos.length);
-console.log(photos[0].url);
-console.log(photos[0].commentsArray);
-console.log(photos[1].likes);
+];*/
+// Добавление элемента в DOM;
+
+var getPicture = function (photo) {
+  var picturesTemplate = document.querySelector('#picture').content;
+  var pictureEl = picturesTemplate.cloneNode(true);
+  pictureEl.querySelector('.picture__img').src = 'photos/' + photo.url + '.jpg';
+  pictureEl.querySelector('.picture__likes').textContent = photo.likes;
+  pictureEl.querySelector('.picture__comments').textContent = photo.comments;
+
+  return pictureEl;
+};
+var picturesContainer = document.querySelector('.pictures');
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < photos.length; i++) {
+  fragment.appendChild(getPicture(photos[i]));
+}
+picturesContainer.appendChild(fragment);
