@@ -110,12 +110,12 @@ renderBigPicture();
 var renderBigPictureComments = function () {
   var commentsTemplate = document.querySelector('.social__comments').firstElementChild;
   var commentsItem = commentsTemplate.cloneNode(true);
+  var commentBigPictureP = commentsItem.querySelector('.social__text');
   for (var i = 0; i < photos[0].comments.length; i++) {
-    var commentBigPictureP = commentsItem.querySelector('.social__text').cloneNode();
     commentBigPictureP.textContent = photos[0].comments[i];
-    commentsItem.appendChild(commentBigPictureP);
   }
-  commentsItem.querySelector('.social__picture').src = 'img/avatar-' + getRandomNumber(USER_AVATAR_MIN_ID, USER_AVATAR_MAX_ID) + '.svg';
+  var commentBigPictureUserAvatar = commentsItem.querySelector('.social__picture');
+  commentBigPictureUserAvatar.src = 'img/avatar-' + getRandomNumber(USER_AVATAR_MIN_ID, USER_AVATAR_MAX_ID) + '.svg';
   return commentsItem;
 };
 
