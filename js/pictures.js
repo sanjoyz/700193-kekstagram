@@ -72,10 +72,10 @@ var photos = makePhotosArray(PHOTOS_QUANTITY);
 var getPicture = function (photo) {
   var picturesTemplate = document.querySelector('#picture').content;
   var pictureEl = picturesTemplate.cloneNode(true);
-  var pictureUrl = pictureEl.querySelector('.picture__img').src;
-  pictureUrl = photo.url;
-  var pictureLikes = pictureEl.querySelector('.picture__likes').textContent;
-  pictureLikes = photo.likes;
+  var pictureUrl = pictureEl.querySelector('.picture__img');
+  pictureUrl.src = photo.url;
+  var pictureLikes = pictureEl.querySelector('.picture__likes');
+  pictureLikes.textContent = photo.likes;
   var commentSpanTemplate = pictureEl.querySelector('.picture__comments');
   var commentSpan = commentSpanTemplate.cloneNode(true);
   for (var i = 0; i < photo.comments.length; i++) {
@@ -107,13 +107,11 @@ var renderBigPicture = function () {
 };
 renderBigPicture();
 
-var renderBigPictureComments = function () {
+var renderBigPictureComments = function (text) {
   var commentsTemplate = document.querySelector('.social__comments').firstElementChild;
   var commentsItem = commentsTemplate.cloneNode(true);
   var commentBigPictureP = commentsItem.querySelector('.social__text');
-  for (var i = 0; i < photos[0].comments.length; i++) {
-    commentBigPictureP.textContent = photos[0].comments[i];
-  }
+  commentBigPictureP.textContent = text;
   var commentBigPictureUserAvatar = commentsItem.querySelector('.social__picture');
   commentBigPictureUserAvatar.src = 'img/avatar-' + getRandomNumber(USER_AVATAR_MIN_ID, USER_AVATAR_MAX_ID) + '.svg';
   return commentsItem;
@@ -122,7 +120,7 @@ var renderBigPictureComments = function () {
 var addBigPictureComments = function () {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < photos[0].comments.length; i++) {
-    var comment = renderBigPictureComments();
+    var comment = renderBigPictureComments(photos[0].comments[i]);
     fragment.appendChild(comment);
   }
   var commentsList = document.querySelector('.social__comments');
