@@ -76,11 +76,11 @@ var getPicture = function (photo) {
   pictureUrl.src = photo.url;
   var pictureLikes = pictureEl.querySelector('.picture__likes');
   pictureLikes.textContent = photo.likes;
-  var commentSpanTemplate = pictureEl.querySelector('.picture__comments');
-  var commentSpan = commentSpanTemplate.cloneNode(true);
+  var pictureInfo = pictureEl.querySelector('.picture__info');
+  var commentSpan = pictureEl.querySelector('.picture__comments');
   for (var i = 0; i < photo.comments.length; i++) {
     commentSpan.textContent = photo.comments[i];
-    pictureEl.appendChild(commentSpan);
+    pictureInfo.appendChild(commentSpan);
   }
   return pictureEl;
 };
