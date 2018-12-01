@@ -84,6 +84,9 @@ var getPicture = function (photo) {
   }
   return pictureEl;
 };
+/**
+*Добавить шаблон для больших фотографий в разметку
+*/
 
 var renderPictures = function () {
   var picturesContainer = document.querySelector('.pictures');
@@ -105,7 +108,6 @@ var renderBigPicture = function () {
   var bigPictureCommentsCount = document.querySelector('.comments-count');
   bigPictureCommentsCount.textContent = photos[0].comments.length.toString();
 };
-renderBigPicture();
 
 var renderBigPictureComments = function (text) {
   var commentsTemplate = document.querySelector('.social__comments').firstElementChild;
@@ -132,3 +134,63 @@ var commentCountBlock = document.querySelector('.social__comment-count');
 var commentLoaderBlock = document.querySelector('.comments-loader');
 commentCountBlock.classList.add('visually-hidden');
 commentLoaderBlock.classList.add('visually-hidden');
+
+/*
+* Загрузка фотографий
+**/
+
+var editForm = document.querySelector('.img-upload__overlay');
+var buttonUploadCanel = editForm.querySelector('#upload-cancel');
+var uploadFileField = document.querySelector('#upload-file');
+
+var openPopup = function () {
+  editForm.classList.remove('hidden');
+};
+var closePopup = function () {
+  editForm.classList.add('hidden');
+  uploadFileField.value = 0;
+};
+
+
+uploadFileField.addEventListener('change', openPopup);
+editForm.addEventListener('keydown', function (evt) {
+  if (evt.key === 27) {
+    editForm.classList.add('hidden');
+  }
+});
+buttonUploadCanel.addEventListener('click', closePopup);
+
+/*
+* Фильтры
+**/
+var filterPin = document.querySelector('.effect-level__pin');
+
+filterPin.addEventListener('mouseup', function () {});
+
+/* Кликаю по инпут id="effect-chrome"
+img внутри img-upload__preview добавляется класс effects__preview--chrome
+*/
+var imgUploadEffects = document.querySelector('.effects__list');
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+// var chromeEffect = imgUploadEffects.querySelector('#effect-chrome');
+
+/*  var imgEffectsClickHandler = function (evt) {
+  if (evt.target === document.querySelector('#effect-chrom')) {
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--chrome');
+  }
+};  */
+imgUploadEffects.addEventListener('click', function (evt) {
+  if (evt.target === document.querySelector('.effects__preview--chrome')) {
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--chrome');
+  } else if (evt.target === document.querySelector('.effects__preview--none')) {
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--none');
+  } else if (evt.target === document.querySelector('.effects__preview--sepia')) {
+    imgUploadPreview.firstElementChild.classList.add('.effects__preview--sepia');
+  } else if (evt.target === document.querySelector('.effects__preview--marvin')) {
+    imgUploadPreview.firstElementChild.classList.add('.effects__preview--marvin');
+  } else if (evt.target === document.querySelector('.effects__preview--phobos')) {
+    imgUploadPreview.firstElementChild.classList.add('.effects__preview--phobos');
+  } else if (evt.target === document.querySelector('.effects__preview--heat')) {
+    imgUploadPreview.firstElementChild.classList.add('.effects__preview--heat');
+  }
+});
