@@ -142,9 +142,9 @@ commentLoaderBlock.classList.add('visually-hidden');
 var editForm = document.querySelector('.img-upload__overlay');
 var buttonUploadCanel = editForm.querySelector('#upload-cancel');
 var uploadFileField = document.querySelector('#upload-file');
-var check = document.querySelector('.img-upload__wrapper');
 var openPopup = function () {
   editForm.classList.remove('hidden');
+  uploadFileField.value = '';
 };
 var closePopup = function () {
   editForm.classList.add('hidden');
