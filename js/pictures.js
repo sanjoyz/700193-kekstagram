@@ -148,6 +148,7 @@ var openPopup = function () {
 };
 var closePopup = function () {
   editForm.classList.add('hidden');
+  imgUploadPreview.firstElementChild.className = '';
 };
 
 
@@ -155,6 +156,7 @@ uploadFileField.addEventListener('change', openPopup);
 document.addEventListener('keyup', function (evt) {
   if (evt.keyCode === 27) {
     editForm.classList.add('hidden');
+    imgUploadPreview.firstElementChild.className = '';
   }
 });
 buttonUploadCanel.addEventListener('click', closePopup);
@@ -179,17 +181,24 @@ var imgUploadPreview = document.querySelector('.img-upload__preview');
   }
 };  */
 imgUploadEffects.addEventListener('click', function (evt) {
+
   if (evt.target === document.querySelector('.effects__preview--chrome')) {
+    imgUploadPreview.firstElementChild.className = '';
     imgUploadPreview.firstElementChild.classList.add('effects__preview--chrome');
   } else if (evt.target === document.querySelector('.effects__preview--none')) {
+    imgUploadPreview.firstElementChild.className = '';
     imgUploadPreview.firstElementChild.classList.add('effects__preview--none');
   } else if (evt.target === document.querySelector('.effects__preview--sepia')) {
-    imgUploadPreview.firstElementChild.classList.add('.effects__preview--sepia');
+    imgUploadPreview.firstElementChild.className = '';
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--sepia');
   } else if (evt.target === document.querySelector('.effects__preview--marvin')) {
-    imgUploadPreview.firstElementChild.classList.add('.effects__preview--marvin');
+    imgUploadPreview.firstElementChild.className = '';
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--marvin');
   } else if (evt.target === document.querySelector('.effects__preview--phobos')) {
-    imgUploadPreview.firstElementChild.classList.add('.effects__preview--phobos');
+    imgUploadPreview.firstElementChild.className = '';
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--phobos');
   } else if (evt.target === document.querySelector('.effects__preview--heat')) {
-    imgUploadPreview.firstElementChild.classList.add('.effects__preview--heat');
+    imgUploadPreview.firstElementChild.className = '';
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--heat');
   }
 });
