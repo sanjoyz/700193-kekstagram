@@ -142,19 +142,18 @@ commentLoaderBlock.classList.add('visually-hidden');
 var editForm = document.querySelector('.img-upload__overlay');
 var buttonUploadCanel = editForm.querySelector('#upload-cancel');
 var uploadFileField = document.querySelector('#upload-file');
-
+var check = document.querySelector('.img-upload__wrapper');
 var openPopup = function () {
   editForm.classList.remove('hidden');
 };
 var closePopup = function () {
   editForm.classList.add('hidden');
-  uploadFileField.value = 0;
 };
 
 
 uploadFileField.addEventListener('change', openPopup);
-editForm.addEventListener('keydown', function (evt) {
-  if (evt.key === 27) {
+document.addEventListener('keyup', function (evt) {
+  if (evt.keyCode === 27) {
     editForm.classList.add('hidden');
   }
 });
