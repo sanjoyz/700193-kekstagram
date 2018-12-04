@@ -166,7 +166,15 @@ buttonUploadCanel.addEventListener('click', closePopup);
 **/
 var filterPin = document.querySelector('.effect-level__pin');
 
-filterPin.addEventListener('mouseup', function () {});
+var calculateEffectDepth = function () {
+  var pinLineWidth = document.querySelector('.effect-level__line').offsetWidth;
+  var pinPosition = document.querySelector('.effect-level__pin').offsetLeft;
+  var effectDepth = (pinPosition * 100) / pinLineWidth;
+  return effectDepth / 100;
+};
+filterPin.addEventListener('mouseup', function () {
+
+});
 
 /* Кликаю по инпут id="effect-chrome"
 img внутри img-upload__preview добавляется класс effects__preview--chrome
@@ -180,6 +188,7 @@ var imgUploadPreview = document.querySelector('.img-upload__preview');
     imgUploadPreview.firstElementChild.classList.add('effects__preview--chrome');
   }
 };  */
+/*
 imgUploadEffects.addEventListener('click', function (evt) {
 
   if (evt.target === document.querySelector('.effects__preview--chrome')) {
@@ -202,3 +211,18 @@ imgUploadEffects.addEventListener('click', function (evt) {
     imgUploadPreview.firstElementChild.classList.add('effects__preview--heat');
   }
 });
+*/
+var effectsList = document.querySelectorAll('.effects__item');
+
+
+var effectsItemClickHandler = function (evt) {
+  if (evt.target.value === 'sepia') {
+    imgUploadPreview.firstElementChild.classList.add('effects__preview--sepia');
+  }
+};
+
+for (var i = 0; i < effectsList.length; i++) {
+  effectsList[i].addEventListener('click', effectsItemClickHandler);
+}
+
+console.log(effectsList);
