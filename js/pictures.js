@@ -182,10 +182,12 @@ var picturePreviewClickHandler = function () {
 };
 
 var picturesPreviewList = document.querySelectorAll('.picture');
-for (var i = 0; i < picturesPreviewList.length; i++) {
-  picturesPreviewList[i].addEventListener('click', picturePreviewClickHandler);
-
-}
+var picturesListener = function () {
+  for (var i = 0; i < picturesPreviewList.length; i++) {
+    picturesPreviewList[i].addEventListener('click', picturePreviewClickHandler);
+  }
+};
+picturesListener();
 /*
 * фильтры
 **/
@@ -212,10 +214,12 @@ var effectsItemClickHandler = function (evt) {
 };
 
 var effectsList = document.querySelectorAll('.effects__item');
-for (var i = 0; i < effectsList.length; i++) {
-  effectsList[i].addEventListener('click', effectsItemClickHandler);
-}
-
+var effectsListener = function () {
+  for (var i = 0; i < effectsList.length; i++) {
+    effectsList[i].addEventListener('click', effectsItemClickHandler);
+  }
+};
+effectsListener();
 /*
 * Расчет глубины фильтров
 **/
@@ -227,6 +231,9 @@ var calculateEffectDepth = function () {
   var effectDepth = (pinPosition * 100) / pinLineWidth;
   return effectDepth / 100;
 };
-filterPin.addEventListener('mouseup', function () {
+var effectLevelPinMouseUpHandler = function () {
+  var pic = imgUploadPreview.firstElementChild;
+  pic.style.filter = 'grayscale(' + calculateEffectDepth() + ')';
+};
 
-});
+filterPin.addEventListener('mouseup', effectLevelPinMouseUpHandler);
