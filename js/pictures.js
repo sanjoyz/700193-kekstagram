@@ -85,7 +85,7 @@ var getPicture = function (photo) {
   return pictureEl;
 };
 /**
-*Добавить шаблон для больших фотографий в разметку
+*
 */
 
 var renderPictures = function () {
@@ -110,13 +110,14 @@ var renderBigPicture = function () {
 };
 
 var renderBigPictureComments = function (text) {
-  var commentsTemplate = document.querySelector('.social__comments').firstElementChild;
-  var commentsItem = commentsTemplate.cloneNode(true);
-  var commentBigPictureP = commentsItem.querySelector('.social__text');
-  commentBigPictureP.textContent = text;
-  var commentBigPictureUserAvatar = commentsItem.querySelector('.social__picture');
+  var commentsTemplate = document.querySelector('#big-comments').content;
+  var commentItemTemplate = commentsTemplate.querySelector('.social__comment');
+  var commentItem = commentItemTemplate.cloneNode(true);
+  var commentItemText = commentItem.querySelector('.social__text');
+  commentItemText.textContent = text;
+  var commentBigPictureUserAvatar = commentItem.querySelector('.social__picture');
   commentBigPictureUserAvatar.src = 'img/avatar-' + getRandomNumber(USER_AVATAR_MIN_ID, USER_AVATAR_MAX_ID) + '.svg';
-  return commentsItem;
+  return commentItem;
 };
 
 var addBigPictureComments = function () {
