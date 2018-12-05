@@ -199,9 +199,10 @@ picturesListener();
 var scaleSmallerControl = document.querySelector('.scale__control--smaller');
 var scaleBiggerControl = document.querySelector('.scale__control--bigger');
 document.querySelector('.scale__control--value').value = '100%'; //  дефолт зума 100%, подумать как улучшить
-var scaleControlValue = document.querySelector('.scale__control--value').value;
+
 var scaleControl = document.querySelector('.scale__control--value');
 var scaleControlClickHandler = function () {
+  var scaleControlValue = document.querySelector('.scale__control--value').value;
   var controlValueInt = parseInt(scaleControlValue, 10);
   if (event.target === scaleSmallerControl && controlValueInt > 0) {
     controlValueInt -= 25;
@@ -212,12 +213,13 @@ var scaleControlClickHandler = function () {
 };
 
 var scaleValueChangeHandler = function () {
-  imgUploadPreview.style.filter = 'transform: scale(' + parseInt(scaleControlValue, 10) / 100 + ')';
+  var scaleControlValue = document.querySelector('.scale__control--value').value;
+  imgUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue, 10) / 100 + ')';
 };
 
 scaleSmallerControl.addEventListener('click', scaleControlClickHandler);
 scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
-scaleControl.addEventListener('change', scaleValueChangeHandler); // ТУТЬ
+scaleControl.addEventListener('input', scaleValueChangeHandler); // ТУТЬ
 
 /*
 * фильтры
