@@ -192,24 +192,25 @@ picturesListener();
 * фильтры
 **/
 
+
 var imgUploadPreview = document.querySelector('.img-upload__preview');
-
-
+var pic = imgUploadPreview.firstElementChild;
 var effectsItemClickHandler = function (evt) {
   var effectClassName = 'effects__preview--' + event.target.value;
-  imgUploadPreview.firstElementChild.className = '';
+  pic.className = '';
+  pic.style = '';
   if (evt.target.value === 'sepia') {
-    imgUploadPreview.firstElementChild.classList.add(effectClassName);
+    pic.classList.add(effectClassName);
   } else if (evt.target.value === 'chrome') {
-    imgUploadPreview.firstElementChild.classList.add(effectClassName);
+    pic.classList.add(effectClassName);
   } else if (evt.target.value === 'none') {
-    imgUploadPreview.firstElementChild.classList.add(effectClassName);
+    pic.classList.add(effectClassName);
   } else if (evt.target.value === 'marvin') {
-    imgUploadPreview.firstElementChild.classList.add(effectClassName);
+    pic.classList.add(effectClassName);
   } else if (evt.target.value === 'phobos') {
-    imgUploadPreview.firstElementChild.classList.add(effectClassName);
+    pic.classList.add(effectClassName);
   } else if (evt.target.value === 'heat') {
-    imgUploadPreview.firstElementChild.classList.add(effectClassName);
+    pic.classList.add(effectClassName);
   }
 };
 
@@ -232,7 +233,6 @@ var calculateEffectDepth = function () {
   return effectDepth / 100;
 };
 var effectLevelPinMouseUpHandler = function () {
-  var pic = imgUploadPreview.firstElementChild;
   pic.style.filter = 'grayscale(' + calculateEffectDepth() + ')';
 };
 
