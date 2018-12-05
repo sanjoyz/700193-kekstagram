@@ -98,11 +98,11 @@ var renderPictures = function () {
 };
 renderPictures();
 
-var renderBigPicture = function () {
+var renderBigPicture = function (photo) {
   var bigPictureContainer = document.querySelector('.big-picture');
   bigPictureContainer.classList.remove('hidden');
   var bigPictureImg = document.querySelector('.big-picture__img').firstElementChild;
-  bigPictureImg.src = photos[0].url;
+  bigPictureImg.src = photo.src;
   var bigPictureLikes = document.querySelector('.likes-count');
   bigPictureLikes.textContent = photos[0].likes;
   var bigPictureCommentsCount = document.querySelector('.comments-count');
@@ -170,8 +170,8 @@ buttonUploadCanel.addEventListener('click', closePopup);
 /*
 * Показ полноэкранного изображения по клику
 **/
-var picturePreviewClickHandler = function () {
-  renderBigPicture();
+var picturePreviewClickHandler = function (event) {
+  renderBigPicture(event.target);
   addBigPictureComments();
   document.addEventListener('keyup', function (evt) {
     if (evt.keyCode === 27) {
@@ -186,6 +186,7 @@ var picturesPreviewList = document.querySelectorAll('.picture');
 var picturesListener = function () {
   for (var i = 0; i < picturesPreviewList.length; i++) {
     picturesPreviewList[i].addEventListener('click', picturePreviewClickHandler);
+
   }
 };
 picturesListener();
