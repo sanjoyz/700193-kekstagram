@@ -171,6 +171,7 @@ buttonUploadCanel.addEventListener('click', closePopup);
 /*
 * Показ полноэкранного изображения по клику
 **/
+
 var picturePreviewClickHandler = function (event) {
   renderBigPicture(event.target);
   addBigPictureComments();
@@ -191,6 +192,33 @@ var picturesListener = function () {
   }
 };
 picturesListener();
+
+/*
+* масштаб превью
+**/
+var scaleSmallerControl = document.querySelector('.scale__control--smaller');
+var scaleBiggerControl = document.querySelector('.scale__control--bigger');
+document.querySelector('.scale__control--value').value = '100%'; //  дефолт зума 100%, подумать как улучшить
+var scaleControlValue = document.querySelector('.scale__control--value').value;
+var scaleControl = document.querySelector('.scale__control--value');
+var scaleControlClickHandler = function () {
+  var controlValueInt = parseInt(scaleControlValue, 10);
+  if (event.target === scaleSmallerControl && controlValueInt > 0) {
+    controlValueInt -= 25;
+  } else if (event.target === scaleBiggerControl && controlValueInt < 100) {
+    controlValueInt += 25;
+  }
+  document.querySelector('.scale__control--value').value = controlValueInt + '%';
+};
+
+var scaleValueChangeHandler = function () {
+  imgUploadPreview.style.filter = 'transform: scale(' + parseInt(scaleControlValue, 10) / 100 + ')';
+};
+
+scaleSmallerControl.addEventListener('click', scaleControlClickHandler);
+scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
+scaleControl.addEventListener('change', scaleValueChangeHandler); // ТУТЬ
+
 /*
 * фильтры
 **/
@@ -212,9 +240,11 @@ var effectsListener = function () {
   }
 };
 effectsListener();
+
 /*
 * Расчет глубины фильтров
 **/
+
 var filterPin = document.querySelector('.effect-level__pin');
 
 var calculateEffectDepth = function () {
