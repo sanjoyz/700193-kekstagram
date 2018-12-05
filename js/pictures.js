@@ -6,6 +6,7 @@ var COMMENTS_MIN = 1;
 var COMMENTS_MAX = 10;
 var USER_AVATAR_MIN_ID = 1;
 var USER_AVATAR_MAX_ID = 6;
+var ESC_KEYCODE = 27;
 //  url: 'photos/' + index + '.jpg', // {{i}} - 1-25
 //  likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
 var commentsArray = [
@@ -160,7 +161,7 @@ var closePopup = function () {
 
 uploadFileField.addEventListener('change', openPopup);
 document.addEventListener('keyup', function (evt) {
-  if (evt.keyCode === 27) {
+  if (evt.keyCode === ESC_KEYCODE) {
     editForm.classList.add('hidden');
     imgUploadPreview.firstElementChild.className = '';
   }
@@ -174,7 +175,7 @@ var picturePreviewClickHandler = function (event) {
   renderBigPicture(event.target);
   addBigPictureComments();
   document.addEventListener('keyup', function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === ESC_KEYCODE) {
       closeBigPicture();
     }
   });
@@ -197,23 +198,11 @@ picturesListener();
 
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var pic = imgUploadPreview.firstElementChild;
-var effectsItemClickHandler = function (evt) {
+var effectsItemClickHandler = function () {
   var effectClassName = 'effects__preview--' + event.target.value;
   pic.className = '';
   pic.style = '';
-  if (evt.target.value === 'sepia') {
-    pic.classList.add(effectClassName);
-  } else if (evt.target.value === 'chrome') {
-    pic.classList.add(effectClassName);
-  } else if (evt.target.value === 'none') {
-    pic.classList.add(effectClassName);
-  } else if (evt.target.value === 'marvin') {
-    pic.classList.add(effectClassName);
-  } else if (evt.target.value === 'phobos') {
-    pic.classList.add(effectClassName);
-  } else if (evt.target.value === 'heat') {
-    pic.classList.add(effectClassName);
-  }
+  pic.classList.add(effectClassName);
 };
 
 var effectsList = document.querySelectorAll('.effects__item');
