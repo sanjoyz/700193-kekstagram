@@ -145,7 +145,7 @@ commentLoaderBlock.classList.add('visually-hidden');
 /*
 * Загрузка фотографий
 **/
-
+var commentTextArea = document.querySelector('.text__description');
 var editForm = document.querySelector('.img-upload__overlay');
 var buttonUploadCanel = editForm.querySelector('#upload-cancel');
 var uploadFileField = document.querySelector('#upload-file');
@@ -161,7 +161,7 @@ var closePopup = function () {
 
 uploadFileField.addEventListener('change', openPopup);
 document.addEventListener('keyup', function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.keyCode === ESC_KEYCODE && document.activeElement !== commentTextArea) {
     editForm.classList.add('hidden');
     imgUploadPreview.firstElementChild.className = '';
   }
@@ -200,7 +200,10 @@ var scaleSmallerControl = document.querySelector('.scale__control--smaller');
 var scaleBiggerControl = document.querySelector('.scale__control--bigger');
 document.querySelector('.scale__control--value').value = '100%'; //  дефолт зума 100%, подумать как улучшить
 
-var scaleControl = document.querySelector('.scale__control--value');
+var scaleValueChangeHandler = function (value) {
+  imgUploadPreview.style.transform = 'scale(' + parseInt(value, 10) / 100 + ')';
+};
+
 var scaleControlClickHandler = function () {
   var scaleControlValue = document.querySelector('.scale__control--value').value;
   var controlValueInt = parseInt(scaleControlValue, 10);
@@ -210,16 +213,12 @@ var scaleControlClickHandler = function () {
     controlValueInt += 25;
   }
   document.querySelector('.scale__control--value').value = controlValueInt + '%';
-};
-
-var scaleValueChangeHandler = function () {
-  var scaleControlValue = document.querySelector('.scale__control--value').value;
-  imgUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue, 10) / 100 + ')';
+  scaleValueChangeHandler(controlValueInt);
 };
 
 scaleSmallerControl.addEventListener('click', scaleControlClickHandler);
 scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
-scaleControl.addEventListener('input', scaleValueChangeHandler); // ТУТЬ
+
 
 /*
 * фильтры
