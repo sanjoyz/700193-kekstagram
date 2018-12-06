@@ -6,6 +6,8 @@ var COMMENTS_MIN = 1;
 var COMMENTS_MAX = 10;
 var USER_AVATAR_MIN_ID = 1;
 var USER_AVATAR_MAX_ID = 6;
+var MAX_HASHTAG_LENGTH = 20;
+var MAX_HASHTAG_COUNT = 5;
 var ESC_KEYCODE = 27;
 //  url: 'photos/' + index + '.jpg', // {{i}} - 1-25
 //  likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
@@ -258,4 +260,30 @@ var effectLevelPinMouseUpHandler = function () {
   pic.style.filter = 'grayscale(' + calculateEffectDepth() + ')';
 };
 
+
 filterPin.addEventListener('mouseup', effectLevelPinMouseUpHandler);
+
+/*
+* Валидация форм
+**/
+var hashtagsInput = document.querySelector('.text__hashtags');
+
+var makeHashtagValidation = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i][0] !== '#') {
+      return 'Хеш тег должен начинаться символом #';
+    } else if (arr[i].length > MAX_HASHTAG_LENGTH) {
+      return 'Длина хеш тега не должна превышать ' + MAX_HASHTAG_LENGTH + ' ';
+    } else if (arr.length > MAX_HASHTAG_COUNT) {
+      return 'Хеш тегов не может быть больше ' + MAX_HASHTAG_COUNT;
+    }
+  }
+  return true;
+};
+
+var hashTagsInputHandler = function () {
+  var hashArr = [];
+  hashArr.push(hashtagsInput.value.split(' '));
+  var validity = hashTagsInputHandler.validity;
+};
+hashtagsInput.addEventListener('input', hashTagsInputHandler);
