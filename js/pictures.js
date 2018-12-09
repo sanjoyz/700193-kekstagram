@@ -151,13 +151,16 @@ var commentTextArea = document.querySelector('.text__description');
 var editForm = document.querySelector('.img-upload__overlay');
 var buttonUploadCanel = editForm.querySelector('#upload-cancel');
 var uploadFileField = document.querySelector('#upload-file');
+
+
 var openPopup = function () {
   editForm.classList.remove('hidden');
-  uploadFileField.value = '';
 };
+
 var closePopup = function () {
   editForm.classList.add('hidden');
   imgUploadPreview.firstElementChild.className = '';
+  uploadFileField.value = '';
 };
 
 
