@@ -281,9 +281,12 @@ var makeHashtagValidation = function (arr) {
   return true;
 };
 
-var hashTagsInputHandler = function () {
+var hashTagsInputHandler = function (evt) {
   var hashArr = [];
   hashArr.push(hashtagsInput.value.split(' '));
-  var validity = hashTagsInputHandler.validity;
+  // var validity = hashTagsInputHandler.validity;
+  if (makeHashtagValidation(hashArr)) {
+    evt.target.setCustomValidity(makeHashtagValidation(hashArr));
+  }
 };
 hashtagsInput.addEventListener('input', hashTagsInputHandler);
