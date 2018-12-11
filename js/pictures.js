@@ -6,6 +6,8 @@ var COMMENTS_MIN = 1;
 var COMMENTS_MAX = 10;
 var USER_AVATAR_MIN_ID = 1;
 var USER_AVATAR_MAX_ID = 6;
+var MAX_HASHTAG_LENGTH = 20;
+var MAX_HASHTAG_COUNT = 5;
 var ESC_KEYCODE = 27;
 //  url: 'photos/' + index + '.jpg', // {{i}} - 1-25
 //  likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
@@ -145,23 +147,27 @@ commentLoaderBlock.classList.add('visually-hidden');
 /*
 * Загрузка фотографий
 **/
-
+var commentTextArea = document.querySelector('.text__description');
+var hashtagsInput = document.querySelector('.text__hashtags');
 var editForm = document.querySelector('.img-upload__overlay');
 var buttonUploadCanel = editForm.querySelector('#upload-cancel');
 var uploadFileField = document.querySelector('#upload-file');
+
+
 var openPopup = function () {
   editForm.classList.remove('hidden');
-  uploadFileField.value = '';
 };
+
 var closePopup = function () {
   editForm.classList.add('hidden');
   imgUploadPreview.firstElementChild.className = '';
+  uploadFileField.value = '';
 };
 
 
 uploadFileField.addEventListener('change', openPopup);
 document.addEventListener('keyup', function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.keyCode === ESC_KEYCODE && document.activeElement !== commentTextArea && document.activeElement !== hashtagsInput) {
     editForm.classList.add('hidden');
     imgUploadPreview.firstElementChild.className = '';
   }
@@ -169,8 +175,48 @@ document.addEventListener('keyup', function (evt) {
 buttonUploadCanel.addEventListener('click', closePopup);
 
 /*
+* Валидация форм
+**/
+
+
+var makeHashtagValidation = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i][0] !== '#') {
+      return 'Хеш тег должен начинаться символом #';
+    } else if (arr[i].length > MAX_HASHTAG_LENGTH) {
+      return 'Длина хеш тега не должна превышать ' + MAX_HASHTAG_LENGTH + ' ';
+    } else if (arr.length > MAX_HASHTAG_COUNT) {
+      return 'Хеш тегов не может быть больше ' + MAX_HASHTAG_COUNT;
+    } else if (arr[i][0] === '#' && arr[i].length < 2) {
+      return 'Хеш тег не может состоять из одной решётки';
+    }
+    for (var j = i + 1; j < arr.length; j++) {
+      if (arr[i].toUpperCase() === arr[j].toUpperCase()) {
+        return 'Один и тот же хеш-тег не может быть использован дважды';
+      }
+    }
+  }
+  return false;
+};
+
+var hashTagsInputHandler = function (evt) {
+  var hashArr = [];
+  hashArr = hashtagsInput.value.split(' ');
+  var target = evt.target;
+  // var validity = hashTagsInputHandler.validity;
+  if (makeHashtagValidation(hashArr)) {
+    target.setCustomValidity(makeHashtagValidation(hashArr));
+  } else {
+    target.setCustomValidity('');
+  }
+};
+hashtagsInput.addEventListener('input', hashTagsInputHandler);
+
+
+/*
 * Показ полноэкранного изображения по клику
 **/
+
 var picturePreviewClickHandler = function (event) {
   renderBigPicture(event.target);
   addBigPictureComments();
@@ -191,6 +237,34 @@ var picturesListener = function () {
   }
 };
 picturesListener();
+
+/*
+* масштаб превью
+**/
+var scaleSmallerControl = document.querySelector('.scale__control--smaller');
+var scaleBiggerControl = document.querySelector('.scale__control--bigger');
+document.querySelector('.scale__control--value').value = '100%'; //  дефолт зума 100%, подумать как улучшить
+
+var scaleValueChangeHandler = function (value) {
+  imgUploadPreview.style.transform = 'scale(' + parseInt(value, 10) / 100 + ')';
+};
+
+var scaleControlClickHandler = function () {
+  var scaleControlValue = document.querySelector('.scale__control--value').value;
+  var controlValueInt = parseInt(scaleControlValue, 10);
+  if (event.target === scaleSmallerControl && controlValueInt > 0) {
+    controlValueInt -= 25;
+  } else if (event.target === scaleBiggerControl && controlValueInt < 100) {
+    controlValueInt += 25;
+  }
+  document.querySelector('.scale__control--value').value = controlValueInt + '%';
+  scaleValueChangeHandler(controlValueInt);
+};
+
+scaleSmallerControl.addEventListener('click', scaleControlClickHandler);
+scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
+
+
 /*
 * фильтры
 **/
@@ -212,9 +286,11 @@ var effectsListener = function () {
   }
 };
 effectsListener();
+
 /*
 * Расчет глубины фильтров
 **/
+
 var filterPin = document.querySelector('.effect-level__pin');
 
 var calculateEffectDepth = function () {
