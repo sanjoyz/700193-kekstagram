@@ -266,6 +266,47 @@ scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
 
 
 /*
+* Движение слайдера эффектов
+**/
+
+var filterPin = document.querySelector('.effect-level__pin');
+var pinLine = document.querySelector('.effect-level__line');
+var effectLevelDepth = document.querySelector('.effect-level__depth');
+// var imgUploadWrapper = document.querySelector('.img-upload__wrapper');
+
+filterPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startingCoords = {
+    x: evt.clientX
+  };
+
+  var filterPinMouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startingCoords.x - moveEvt.clientX,
+    };
+    startingCoords = {
+      x: moveEvt.clientX
+    };
+    if ((filterPin.offsetLeft - shift.x) > 0 && (filterPin.offsetLeft - shift.x) < pinLine.offsetWidth) {
+      filterPin.style.left = (filterPin.offsetLeft - shift.x) + 'px';
+    }
+    effectLevelDepth.style.width = filterPin.style.left;
+  };
+
+  var filterPinMouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', filterPinMouseMoveHandler);
+    document.removeEventListener('mouseup', filterPinMouseUpHandler);
+  };
+
+  document.addEventListener('mousemove', filterPinMouseMoveHandler);
+  document.addEventListener('mouseup', filterPinMouseUpHandler);
+});
+
+/*
 * фильтры
 **/
 
@@ -287,16 +328,15 @@ var effectsListener = function () {
 };
 effectsListener();
 
+
 /*
 * Расчет глубины фильтров
 **/
 
-var filterPin = document.querySelector('.effect-level__pin');
 
 var calculateEffectDepth = function () {
-  var pinLineWidth = document.querySelector('.effect-level__line').offsetWidth;
   var pinPosition = document.querySelector('.effect-level__pin').offsetLeft;
-  var effectDepth = (pinPosition * 100) / pinLineWidth;
+  var effectDepth = (pinPosition * 100) / pinLine.offsetWidth;
   return effectDepth / 100;
 };
 var effectLevelPinMouseUpHandler = function () {
