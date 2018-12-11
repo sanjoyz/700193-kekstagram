@@ -9,8 +9,9 @@ var USER_AVATAR_MAX_ID = 6;
 var MAX_HASHTAG_LENGTH = 20;
 var MAX_HASHTAG_COUNT = 5;
 var ESC_KEYCODE = 27;
-//  url: 'photos/' + index + '.jpg', // {{i}} - 1-25
-//  likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
+var DEFAULT_FILTER_PIN_POSITION = '100%';
+var effectClassName;
+
 var commentsArray = [
   'Всё отлично.',
   'В целом всё неплохо. Но не всё.',
@@ -156,6 +157,7 @@ var uploadFileField = document.querySelector('#upload-file');
 
 var openPopup = function () {
   editForm.classList.remove('hidden');
+  imgUploadEffectLevel.classList.add('hidden');
 };
 
 var closePopup = function () {
@@ -276,16 +278,13 @@ var effectLevelDepth = document.querySelector('.effect-level__depth');
 
 filterPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
-
   var startingCoords = {
     x: evt.clientX
   };
-
   var filterPinMouseMoveHandler = function (moveEvt) {
     moveEvt.preventDefault();
-
     var shift = {
-      x: startingCoords.x - moveEvt.clientX,
+      x: startingCoords.x - moveEvt.clientX
     };
     startingCoords = {
       x: moveEvt.clientX
@@ -294,11 +293,13 @@ filterPin.addEventListener('mousedown', function (evt) {
       filterPin.style.left = (filterPin.offsetLeft - shift.x) + 'px';
     }
     effectLevelDepth.style.width = filterPin.style.left;
+    var ratio = calculateEffectDepth();
+    effectLevelChanger(ratio);
   };
 
-  var filterPinMouseUpHandler = function (upEvt) {
-    upEvt.preventDefault();
-    document.removeEventListener('mousemove', filterPinMouseMoveHandler);
+  var filterPinMouseUpHandler = function () {
+    evt.preventDefault();
+    document.removeEventListener('mousemove', filterPinMouseMoveHandler); // filterPin.removeEventListener('mousemove', filterPinMouseMoveHandler); почему так не работает?
     document.removeEventListener('mouseup', filterPinMouseUpHandler);
   };
 
@@ -306,18 +307,33 @@ filterPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', filterPinMouseUpHandler);
 });
 
+
 /*
 * фильтры
 **/
-
+var effectsListMap = {
+  'chrome': 'effects__preview--chrome',
+  'sepia': 'effects__preview--sepia',
+  'marvin': 'effects__preview--marvin',
+  'phobos': 'effects__preview--phobos',
+  'heat': 'effects__preview--heat'
+};
 
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var pic = imgUploadPreview.firstElementChild;
-var effectsItemClickHandler = function () {
-  var effectClassName = 'effects__preview--' + event.target.value;
+var imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
+var effectsItemClickHandler = function (evt) {
+  imgUploadEffectLevel.classList.remove('hidden');
+  effectClassName = effectsListMap[evt.target.value];
   pic.className = '';
   pic.style = '';
   pic.classList.add(effectClassName);
+  if (evt.target.value === 'none') {
+    imgUploadEffectLevel.classList.add('hidden');
+  }
+  effectLevelDepth.style.width = DEFAULT_FILTER_PIN_POSITION;
+  filterPin.style.left = DEFAULT_FILTER_PIN_POSITION;
+
 };
 
 var effectsList = document.querySelectorAll('.effects__item');
@@ -328,19 +344,27 @@ var effectsListener = function () {
 };
 effectsListener();
 
-
 /*
 * Расчет глубины фильтров
 **/
 
-
 var calculateEffectDepth = function () {
-  var pinPosition = document.querySelector('.effect-level__pin').offsetLeft;
+  var pinPosition = filterPin.offsetLeft;
   var effectDepth = (pinPosition * 100) / pinLine.offsetWidth;
   return effectDepth / 100;
 };
-var effectLevelPinMouseUpHandler = function () {
-  pic.style.filter = 'grayscale(' + calculateEffectDepth() + ')';
-};
 
-filterPin.addEventListener('mouseup', effectLevelPinMouseUpHandler);
+var effectLevelChanger = function (ratio) {
+  if (effectClassName === 'effects__preview--chrome') {
+    pic.style.filter = 'grayscale(' + ratio + ')';
+  } else if (effectClassName === 'effects__preview--sepia') {
+    pic.style.filter = 'sepia(' + ratio + ')';
+  } else if (effectClassName === 'effects__preview--marvin') {
+    pic.style.filter = 'invert(' + ratio * 100 + '%)';
+  } else if (effectClassName === 'effects__preview--phobos') {
+    pic.style.filter = 'blur(' + ratio * 3 + 'px)';
+  } else if (effectClassName === 'effects__preview--heat') {
+    pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+  }
+
+};
