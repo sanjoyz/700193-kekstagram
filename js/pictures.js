@@ -9,6 +9,8 @@ var USER_AVATAR_MAX_ID = 6;
 var MAX_HASHTAG_LENGTH = 20;
 var MAX_HASHTAG_COUNT = 5;
 var ESC_KEYCODE = 27;
+var ARROW_RIGHT_KEY_CODE = 39;
+var ARROW_LEFT_KEY_CODE = 37;
 var DEFAULT_FILTER_PIN_POSITION = '100%';
 var effectClassName;
 
@@ -308,6 +310,22 @@ filterPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', filterPinMouseUpHandler);
 });
 
+var filterPinKeyDownHandler = function (evt) {
+  var shift = 7;
+  if (evt.keyCode === ARROW_RIGHT_KEY_CODE) {
+    shift = -shift;
+  } else if (evt.keyCode === ARROW_LEFT_KEY_CODE) {
+    shift = +shift;
+  }
+  if ((filterPin.offsetLeft - shift) > 0 && (filterPin.offsetLeft - shift) < pinLine.offsetWidth) {
+    filterPin.style.left = (filterPin.offsetLeft - shift) + 'px';
+  }
+  effectLevelDepth.style.width = filterPin.style.left;
+  var ratio = calculateEffectDepth();
+  effectDepthChanger(ratio);
+};
+
+filterPin.addEventListener('keydown', filterPinKeyDownHandler);
 
 /*
 * фильтры
