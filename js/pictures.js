@@ -294,12 +294,12 @@ filterPin.addEventListener('mousedown', function (evt) {
     }
     effectLevelDepth.style.width = filterPin.style.left;
     var ratio = calculateEffectDepth();
-    effectLevelChanger(ratio);
+    effectDepthChanger(ratio);
   };
 
   var filterPinMouseUpHandler = function () {
     evt.preventDefault();
-    document.removeEventListener('mousemove', filterPinMouseMoveHandler); // filterPin.removeEventListener('mousemove', filterPinMouseMoveHandler); почему так не работает?
+    document.removeEventListener('mousemove', filterPinMouseMoveHandler);
     document.removeEventListener('mouseup', filterPinMouseUpHandler);
   };
 
@@ -312,6 +312,7 @@ filterPin.addEventListener('mousedown', function (evt) {
 * фильтры
 **/
 var effectsListMap = {
+  'none': 'effects__preview--none',
   'chrome': 'effects__preview--chrome',
   'sepia': 'effects__preview--sepia',
   'marvin': 'effects__preview--marvin',
@@ -336,7 +337,7 @@ var effectsItemClickHandler = function (evt) {
 
 };
 
-var effectsList = document.querySelectorAll('.effects__item');
+var effectsList = document.querySelectorAll('.effects__radio');
 var effectsListener = function () {
   for (var i = 0; i < effectsList.length; i++) {
     effectsList[i].addEventListener('click', effectsItemClickHandler);
@@ -354,17 +355,23 @@ var calculateEffectDepth = function () {
   return effectDepth / 100;
 };
 
-var effectLevelChanger = function (ratio) {
-  if (effectClassName === 'effects__preview--chrome') {
-    pic.style.filter = 'grayscale(' + ratio + ')';
-  } else if (effectClassName === 'effects__preview--sepia') {
-    pic.style.filter = 'sepia(' + ratio + ')';
-  } else if (effectClassName === 'effects__preview--marvin') {
-    pic.style.filter = 'invert(' + ratio * 100 + '%)';
-  } else if (effectClassName === 'effects__preview--phobos') {
-    pic.style.filter = 'blur(' + ratio * 3 + 'px)';
-  } else if (effectClassName === 'effects__preview--heat') {
-    pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+var effectDepthChanger = function (ratio) {
+  switch (effectClassName) {
+    case 'effects__preview--chrom':
+      pic.style.filter = 'grayscale(' + ratio + ')';
+      break;
+    case 'effects__preview--sepia':
+      pic.style.filter = 'sepia(' + ratio + ')';
+      break;
+    case 'effects__preview--marvin':
+      pic.style.filter = 'invert(' + ratio * 100 + '%)';
+      break;
+    case 'effects__preview--phobos':
+      pic.style.filter = 'blur(' + ratio * 3 + 'px)';
+      break;
+    case 'effects__preview--heat':
+      pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+      break;
   }
 
 };
