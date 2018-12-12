@@ -272,6 +272,7 @@ scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
 **/
 
 var filterPin = document.querySelector('.effect-level__pin');
+
 var pinLine = document.querySelector('.effect-level__line');
 var effectLevelDepth = document.querySelector('.effect-level__depth');
 // var imgUploadWrapper = document.querySelector('.img-upload__wrapper');
@@ -299,11 +300,11 @@ filterPin.addEventListener('mousedown', function (evt) {
 
   var filterPinMouseUpHandler = function () {
     evt.preventDefault();
-    document.removeEventListener('mousemove', filterPinMouseMoveHandler);
+    imgUploadEffectLevel.removeEventListener('mousemove', filterPinMouseMoveHandler);
     document.removeEventListener('mouseup', filterPinMouseUpHandler);
   };
 
-  document.addEventListener('mousemove', filterPinMouseMoveHandler);
+  imgUploadEffectLevel.addEventListener('mousemove', filterPinMouseMoveHandler);
   document.addEventListener('mouseup', filterPinMouseUpHandler);
 });
 
