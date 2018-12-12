@@ -254,7 +254,7 @@ var scaleValueChangeHandler = function (value) {
 var scaleControlClickHandler = function () {
   var scaleControlValue = document.querySelector('.scale__control--value').value;
   var controlValueInt = parseInt(scaleControlValue, 10);
-  if (event.target === scaleSmallerControl && controlValueInt > 0) {
+  if (event.target === scaleSmallerControl && controlValueInt > 25) {
     controlValueInt -= 25;
   } else if (event.target === scaleBiggerControl && controlValueInt < 100) {
     controlValueInt += 25;
