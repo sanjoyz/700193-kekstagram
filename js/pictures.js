@@ -9,8 +9,11 @@ var USER_AVATAR_MAX_ID = 6;
 var MAX_HASHTAG_LENGTH = 20;
 var MAX_HASHTAG_COUNT = 5;
 var ESC_KEYCODE = 27;
-//  url: 'photos/' + index + '.jpg', // {{i}} - 1-25
-//  likes: Math.round(LIKES_MIN + Math.random() * (LIKES_MAX - LIKES_MIN)),
+var ARROW_RIGHT_KEY_CODE = 39;
+var ARROW_LEFT_KEY_CODE = 37;
+var DEFAULT_FILTER_PIN_POSITION = '100%';
+var effectClassName;
+
 var commentsArray = [
   'Всё отлично.',
   'В целом всё неплохо. Но не всё.',
@@ -156,6 +159,7 @@ var uploadFileField = document.querySelector('#upload-file');
 
 var openPopup = function () {
   editForm.classList.remove('hidden');
+  imgUploadEffectLevel.classList.add('hidden');
 };
 
 var closePopup = function () {
@@ -252,7 +256,7 @@ var scaleValueChangeHandler = function (value) {
 var scaleControlClickHandler = function () {
   var scaleControlValue = document.querySelector('.scale__control--value').value;
   var controlValueInt = parseInt(scaleControlValue, 10);
-  if (event.target === scaleSmallerControl && controlValueInt > 0) {
+  if (event.target === scaleSmallerControl && controlValueInt > 25) {
     controlValueInt -= 25;
   } else if (event.target === scaleBiggerControl && controlValueInt < 100) {
     controlValueInt += 25;
@@ -266,20 +270,93 @@ scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
 
 
 /*
-* фильтры
+* Движение слайдера эффектов
 **/
 
+var filterPin = document.querySelector('.effect-level__pin');
+
+var pinLine = document.querySelector('.effect-level__line');
+var effectLevelDepth = document.querySelector('.effect-level__depth');
+// var imgUploadWrapper = document.querySelector('.img-upload__wrapper');
+
+filterPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startingCoords = {
+    x: evt.clientX
+  };
+  var filterPinMouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startingCoords.x - moveEvt.clientX
+    };
+    startingCoords = {
+      x: moveEvt.clientX
+    };
+    if ((filterPin.offsetLeft - shift.x) > 0 && (filterPin.offsetLeft - shift.x) < pinLine.offsetWidth) {
+      filterPin.style.left = (filterPin.offsetLeft - shift.x) + 'px';
+    }
+    effectLevelDepth.style.width = filterPin.style.left;
+    var ratio = calculateEffectDepth();
+    effectDepthChanger(ratio);
+  };
+
+  var filterPinMouseUpHandler = function () {
+    evt.preventDefault();
+    imgUploadEffectLevel.removeEventListener('mousemove', filterPinMouseMoveHandler);
+    document.removeEventListener('mouseup', filterPinMouseUpHandler);
+  };
+
+  imgUploadEffectLevel.addEventListener('mousemove', filterPinMouseMoveHandler);
+  document.addEventListener('mouseup', filterPinMouseUpHandler);
+});
+
+var filterPinKeyDownHandler = function (evt) {
+  var shift = 7;
+  if (evt.keyCode === ARROW_RIGHT_KEY_CODE) {
+    shift = -shift;
+  } else if (evt.keyCode === ARROW_LEFT_KEY_CODE) {
+    shift = +shift;
+  }
+  if ((filterPin.offsetLeft - shift) > 0 && (filterPin.offsetLeft - shift) < pinLine.offsetWidth) {
+    filterPin.style.left = (filterPin.offsetLeft - shift) + 'px';
+  }
+  effectLevelDepth.style.width = filterPin.style.left;
+  var ratio = calculateEffectDepth();
+  effectDepthChanger(ratio);
+};
+
+filterPin.addEventListener('keydown', filterPinKeyDownHandler);
+
+/*
+* фильтры
+**/
+var effectsListMap = {
+  'none': 'effects__preview--none',
+  'chrome': 'effects__preview--chrome',
+  'sepia': 'effects__preview--sepia',
+  'marvin': 'effects__preview--marvin',
+  'phobos': 'effects__preview--phobos',
+  'heat': 'effects__preview--heat'
+};
 
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 var pic = imgUploadPreview.firstElementChild;
-var effectsItemClickHandler = function () {
-  var effectClassName = 'effects__preview--' + event.target.value;
+var imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
+var effectsItemClickHandler = function (evt) {
+  imgUploadEffectLevel.classList.remove('hidden');
+  effectClassName = effectsListMap[evt.target.value];
   pic.className = '';
   pic.style = '';
   pic.classList.add(effectClassName);
+  if (evt.target.value === 'none') {
+    imgUploadEffectLevel.classList.add('hidden');
+  }
+  effectLevelDepth.style.width = DEFAULT_FILTER_PIN_POSITION;
+  filterPin.style.left = DEFAULT_FILTER_PIN_POSITION;
+
 };
 
-var effectsList = document.querySelectorAll('.effects__item');
+var effectsList = document.querySelectorAll('.effects__radio');
 var effectsListener = function () {
   for (var i = 0; i < effectsList.length; i++) {
     effectsList[i].addEventListener('click', effectsItemClickHandler);
@@ -291,16 +368,29 @@ effectsListener();
 * Расчет глубины фильтров
 **/
 
-var filterPin = document.querySelector('.effect-level__pin');
-
 var calculateEffectDepth = function () {
-  var pinLineWidth = document.querySelector('.effect-level__line').offsetWidth;
-  var pinPosition = document.querySelector('.effect-level__pin').offsetLeft;
-  var effectDepth = (pinPosition * 100) / pinLineWidth;
+  var pinPosition = filterPin.offsetLeft;
+  var effectDepth = (pinPosition * 100) / pinLine.offsetWidth;
   return effectDepth / 100;
 };
-var effectLevelPinMouseUpHandler = function () {
-  pic.style.filter = 'grayscale(' + calculateEffectDepth() + ')';
-};
 
-filterPin.addEventListener('mouseup', effectLevelPinMouseUpHandler);
+var effectDepthChanger = function (ratio) {
+  switch (effectClassName) {
+    case 'effects__preview--chrome':
+      pic.style.filter = 'grayscale(' + ratio + ')';
+      break;
+    case 'effects__preview--sepia':
+      pic.style.filter = 'sepia(' + ratio + ')';
+      break;
+    case 'effects__preview--marvin':
+      pic.style.filter = 'invert(' + ratio * 100 + '%)';
+      break;
+    case 'effects__preview--phobos':
+      pic.style.filter = 'blur(' + ratio * 3 + 'px)';
+      break;
+    case 'effects__preview--heat':
+      pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+      break;
+  }
+
+};
