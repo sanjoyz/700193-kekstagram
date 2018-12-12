@@ -376,7 +376,7 @@ var calculateEffectDepth = function () {
 
 var effectDepthChanger = function (ratio) {
   switch (effectClassName) {
-    case 'effects__preview--chrom':
+    case 'effects__preview--chrome':
       pic.style.filter = 'grayscale(' + ratio + ')';
       break;
     case 'effects__preview--sepia':
