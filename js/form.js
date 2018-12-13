@@ -201,4 +201,11 @@
     }
 
   };
+  var form = document.querySelector('.img-upload__form');
+  form.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(form), function () {
+      editForm.classList.add('hidden');
+    });
+    evt.preventDefault();
+  });
 })();
