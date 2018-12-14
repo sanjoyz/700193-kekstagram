@@ -29,7 +29,7 @@
     return Math.round(min + Math.random() * (max - min));
 
   };
-  var getRandomComment = function (array) {
+  /* var getRandomComment = function (array) {
     var randomComment = array[getRandomNumber(0, array.length - 1)];
     var isLong = !!getRandomNumber(0, 1);
     if (isLong) {
@@ -63,9 +63,35 @@
     }
     return photos;
   };
+  */
+  /* var onLoad = function (data) {
+    var photos = [];
+    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
+      var photo = {
+        url: data[i]['url'],
+        likes: data[i]['likes'],
+        comments: data[i]['comments']
+      };
+      photos.push(photo);
+    }
+    return photos;
+  };*/
+  var makePhotosArray = window.backend.download(function (data) {
+    var photos = [];
+    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
+      var photo = {
+        url: data[i]['url'],
+        likes: data[i]['likes'],
+        comments: data[i]['comments']
+      };
+      photos.push(photo);
+    }
+  });
+
+
   window.getData = {
     getRandomNumber: getRandomNumber,
-    photos: makePhotosArray(PHOTOS_QUANTITY)
+    photos: makePhotosArray
   };
 
 })();
