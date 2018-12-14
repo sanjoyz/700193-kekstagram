@@ -64,7 +64,7 @@
     return photos;
   };
   */
-  /* var onLoad = function (data) {
+  var makePhotosArray = function (data) {
     var photos = [];
     for (var i = 0; i < PHOTOS_QUANTITY; i++) {
       var photo = {
@@ -75,23 +75,11 @@
       photos.push(photo);
     }
     return photos;
-  };*/
-  var makePhotosArray = window.backend.download(function (data) {
-    var photos = [];
-    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
-      var photo = {
-        url: data[i]['url'],
-        likes: data[i]['likes'],
-        comments: data[i]['comments']
-      };
-      photos.push(photo);
-    }
-  });
-
+  };
 
   window.getData = {
     getRandomNumber: getRandomNumber,
-    photos: makePhotosArray
+    photos: window.backend.download(makePhotosArray)
   };
 
 })();

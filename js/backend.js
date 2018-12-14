@@ -1,9 +1,9 @@
 'use strict';
 
-(function () {
-  //  var URL_POST = 'https://js.dump.academy/kekstagram';
-  var URL_GET = 'https://js.dump.academy/kekstagram/data';
-  /*
+
+//  var URL_POST = 'https://js.dump.academy/kekstagram';
+var URL_GET = 'https://js.dump.academy/kekstagram/data';
+/*
   var upload = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -30,19 +30,17 @@
   };
 */
 
-  var download = function (onLoad) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-    xhr.open('GET', URL_GET);
-    xhr.addEventListener('load', function () {
-      onLoad(xhr.response);
-    });
-    xhr.send();
-  };
+var download = function (onLoad) {
+  var xhr = new XMLHttpRequest();
+  xhr.responseType = 'json';
+  xhr.open('GET', URL_GET);
+  xhr.addEventListener('load', function () {
+    onLoad(xhr.response);
+  });
+  xhr.send();
+};
 
-  window.backend = {
-    // ulpoad: upload,
-    download: download
-  };
-
-})();
+window.backend = {
+  // ulpoad: upload,
+  download: download
+};
