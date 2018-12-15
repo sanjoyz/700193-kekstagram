@@ -202,10 +202,16 @@
 
   };
   var form = document.querySelector('.img-upload__form');
+  var formUploadSuccesHandler = function () {
+    editForm.classList.add('hidden');
+  };
+  var formUploadErrorHandler = function () {
+
+  };
+
   form.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(form), function () {
-      editForm.classList.add('hidden');
-    });
     evt.preventDefault();
+    window.backend.upload(new FormData(form), formUploadSuccesHandler, formUploadErrorHandler);
+
   });
 })();

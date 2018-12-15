@@ -1,16 +1,21 @@
 'use strict';
 
-
-//  var URL_POST = 'https://js.dump.academy/kekstagram';
-var URL_GET = 'https://js.dump.academy/kekstagram/data';
-/*
-  var upload = function (data, onLoad, onError) {
-    var xhr = new XMLHttpRequest();
+(function () {
+  var URL_GET = 'https://js.dump.academy/kekstagram/data';
+  var URL_POST = 'https://js.dump.academy/kekstagram';
+  /*
+* DRY
+*/
+  var getXhr = function (xhr, onLoad, onError) {
     xhr.responseType = 'json';
-    xhr.open('POST', URL_POST);
+    xhr.timeout = '10000';
+
     xhr.addEventListener('load', function () {
       var error;
       switch (xhr.status) {
+        case 200:
+          onLoad(xhr.response);
+          break;
         case 400:
           error = 'Неверный запрос';
           break;
@@ -22,25 +27,29 @@ var URL_GET = 'https://js.dump.academy/kekstagram/data';
       }
       if (error) {
         onError(error);
-      } else {
-        onLoad(xhr.response);
       }
     });
+
+    xhr.addEventListener('timeout', function () {
+      onError('Превышен лимит ожидания ' + xhr.timeout);
+    });
+  };
+
+  var upload = function (data, onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+    getXhr(xhr, onLoad, onError);
+    xhr.open('POST', URL_POST);
     xhr.send(data);
   };
-*/
+  var download = function (onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+    getXhr(xhr, onLoad, onError);
+    xhr.open('GET', URL_GET);
+    xhr.send();
+  };
 
-var download = function (onLoad) {
-  var xhr = new XMLHttpRequest();
-  xhr.responseType = 'json';
-  xhr.open('GET', URL_GET);
-  xhr.addEventListener('load', function () {
-    onLoad(xhr.response);
-  });
-  xhr.send();
-};
-
-window.backend = {
-  // ulpoad: upload,
-  download: download
-};
+  window.backend = {
+    upload: upload,
+    download: download
+  };
+})();

@@ -6,7 +6,11 @@
     return evt.keyCode === ESC_KEYCODE;
   };
 
+  var getRandomNumber = function (min, max) {
+    return Math.round(min + Math.random() * (max - min));
+  };
   window.utility = {
-    isEscEvent: isEscEvent
+    isEscEvent: isEscEvent,
+    getRandomNumber: getRandomNumber
   };
 })();

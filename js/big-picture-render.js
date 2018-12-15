@@ -2,7 +2,7 @@
 (function () {
   var USER_AVATAR_MIN_ID = 1;
   var USER_AVATAR_MAX_ID = 6;
-  var photos = window.getData.photos;
+  var photos = [];
   var renderBigPicture = function (photo) {
     var bigPictureContainer = document.querySelector('.big-picture');
     bigPictureContainer.classList.remove('hidden');
@@ -21,7 +21,7 @@
     var commentItemText = commentItem.querySelector('.social__text');
     commentItemText.textContent = text;
     var commentBigPictureUserAvatar = commentItem.querySelector('.social__picture');
-    commentBigPictureUserAvatar.src = 'img/avatar-' + window.getData.getRandomNumber(USER_AVATAR_MIN_ID, USER_AVATAR_MAX_ID) + '.svg';
+    commentBigPictureUserAvatar.src = 'img/avatar-' + window.utility.getRandomNumber(USER_AVATAR_MIN_ID, USER_AVATAR_MAX_ID) + '.svg';
     return commentItem;
   };
 

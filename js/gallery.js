@@ -1,9 +1,11 @@
 'use strict';
 
 /**
-  *Добавление элемента в DOM
-  */
+  * Создание галереи миниатюр
+*/
 (function () {
+  var PHOTOS_QUANTITY = 25;
+
   var getPicture = function (photo) {
     var picturesTemplate = document.querySelector('#picture').content;
     var pictureEl = picturesTemplate.cloneNode(true);
@@ -14,22 +16,24 @@
     var pictureInfo = pictureEl.querySelector('.picture__info');
     var commentSpan = pictureEl.querySelector('.picture__comments');
     for (var i = 0; i < photo.comments.length; i++) {
-      commentSpan.textContent = photo.comments[i];
+      commentSpan.textContent = photo.comments[i].message;
       pictureInfo.appendChild(commentSpan);
     }
     return pictureEl;
   };
-  /**
-  *
-  */
-  var photos = window.getData.photos;
-  var renderPictures = function () {
+
+  var renderPictures = function (photos) {
     var picturesContainer = document.querySelector('.pictures');
     var pictureFragment = document.createDocumentFragment();
-    for (var i = 0; i < photos.length; i++) {
+    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
       pictureFragment.appendChild(getPicture(photos[i]));
     }
     picturesContainer.appendChild(pictureFragment);
   };
-  renderPictures();
+
+  window.backend.download(renderPictures);
+
+  window.gallery = {
+    photos:
+  };
 })();
