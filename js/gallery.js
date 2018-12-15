@@ -33,7 +33,4 @@
 
   window.backend.download(renderPictures);
 
-  window.gallery = {
-    photos:
-  };
 })();
