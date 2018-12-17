@@ -392,5 +392,4 @@ var effectDepthChanger = function (ratio) {
       pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
       break;
   }
-
 };

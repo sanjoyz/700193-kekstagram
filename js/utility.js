@@ -6,7 +6,34 @@
     return evt.keyCode === ESC_KEYCODE;
   };
 
+  var getRandomNumber = function (min, max) {
+    return Math.round(min + Math.random() * (max - min));
+  };
+
+  var createMessage = function (status, text) {
+    var template = document.querySelector('#' + status);
+    var messageContainer = template.content.querySelector('.' + status).cloneNode(true);
+    var messageTitle = messageContainer.querySelector('.' + status + '__title');
+    messageTitle.textContent = text;
+    var messageButton = messageContainer.querySelector('.' + status + '__button');
+    document.querySelector('main').appendChild(messageContainer);
+
+    var hideMessage = function (evt) {
+      var target = evt.target;
+      if (target.classList.contains('error__button') || target.classList.contains('success__button') || evt.keyCode === ESC_KEYCODE) {
+        messageContainer.removeEventListener('click', hideMessage);
+        document.addEventListener('click', hideMessage);
+        messageContainer.parentElement.removeChild(messageContainer);
+      }
+    };
+
+    messageButton.addEventListener('click', hideMessage);
+    document.addEventListener('click', hideMessage);
+
+  };
   window.utility = {
-    isEscEvent: isEscEvent
+    isEscEvent: isEscEvent,
+    getRandomNumber: getRandomNumber,
+    createMessage: createMessage
   };
 })();

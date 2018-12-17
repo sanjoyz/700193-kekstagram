@@ -11,6 +11,7 @@
   var editForm = document.querySelector('.img-upload__overlay');
   var buttonUploadCanel = editForm.querySelector('#upload-cancel');
   var uploadFileField = document.querySelector('#upload-file');
+  var form = document.querySelector('.img-upload__form');
 
 
   var openPopup = function () {
@@ -34,14 +35,14 @@
   });
   buttonUploadCanel.addEventListener('click', closePopup);
 
-  /*
-* Валидация форм
+  /**
+** Валидация форм
 **/
 
-
-  var makeHashtagValidation = function (arr) {
+  var makeHashtagValidation = function (arr, target) {
     for (var i = 0; i < arr.length; i++) {
       if (arr[i][0] !== '#') {
+        target.style.border = '1px solid red';
         return 'Хеш тег должен начинаться символом #';
       } else if (arr[i].length > MAX_HASHTAG_LENGTH) {
         return 'Длина хеш тега не должна превышать ' + MAX_HASHTAG_LENGTH + ' ';
@@ -63,11 +64,11 @@
     var hashArr = [];
     hashArr = hashtagsInput.value.split(' ');
     var target = evt.target;
-    // var validity = hashTagsInputHandler.validity;
     if (makeHashtagValidation(hashArr)) {
-      target.setCustomValidity(makeHashtagValidation(hashArr));
+      target.setCustomValidity(makeHashtagValidation(hashArr, target));
     } else {
       target.setCustomValidity('');
+      target.style.border = '';
     }
   };
   hashtagsInput.addEventListener('input', hashTagsInputHandler);
@@ -199,6 +200,35 @@
     } else if (effectClassName === 'effects__preview--heat') {
       pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
     }
-
   };
+
+  /*
+** Работа с отправкой формы
+*/
+  var formRestoreDefault = function () {
+    var file = document.querySelector('#upload-file');
+    file.value = '';
+    commentTextArea.value = '';
+    hashtagsInput.value = '';
+  };
+
+  var formUploadSuccesHandler = function () {
+    var uploadImg = imgUploadPreview.firstElementChild;
+    uploadImg.style = '';
+    uploadImg.classList = '';
+    editForm.classList.add('hidden');
+    formRestoreDefault();
+    window.utility.createMessage('success', 'Загрузка успешна');
+  };
+
+  var formUploadErrorHandler = function () {
+    window.utility.createMessage('error', 'Ошибка загрузки');
+  };
+
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.upload(new FormData(form), formUploadSuccesHandler, formUploadErrorHandler);
+
+  });
 })();
