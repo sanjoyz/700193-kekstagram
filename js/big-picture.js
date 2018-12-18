@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-
+  var INIT_SHOW_COMMENTS = 5;
   /*
 ** Создание дом элементов
 */
@@ -14,6 +14,8 @@
   /*
 ** renderPicture - принимает объект (фотографию). Наполняет дом элементы исходя из принятых данных
 */
+
+
   var renderBigPicture = function (photo) {
     bigPictureContainer.classList.remove('hidden');
     bigPictureImg.src = photo.url;
