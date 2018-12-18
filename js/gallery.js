@@ -4,46 +4,64 @@
 * Создание галереи миниатюр
 */
 (function () {
+  var MAX_NEW_PHOTOS = 10;
   var PHOTOS_QUANTITY = 25;
   var photos = [];
-  /*
-** getPicture - принимает объект "фото", создает из него миниатюру
-** фотографии в галерее
-*/
-  var getPicture = function (photoData) {
-    var picturesTemplate = document.querySelector('#picture').content;
-    var pictureEl = picturesTemplate.cloneNode(true);
-    var pictureUrl = pictureEl.querySelector('.picture__img');
-    pictureUrl.src = photoData.url;
-    var pictureLikes = pictureEl.querySelector('.picture__likes');
-    pictureLikes.textContent = photoData.likes;
-    var pictureInfo = pictureEl.querySelector('.picture__info');
-    var commentSpan = pictureEl.querySelector('.picture__comments');
-    //  for (var i = 0; i < photoData.comments.length; i++) {
-    commentSpan.textContent = photoData.comments.length;
-    pictureInfo.appendChild(commentSpan);
-    return pictureEl;
-  };
+  var picturesElement = document.querySelector('.pictures');
+  var copy = [];
+  var createPictures = function (photoData) {
 
-  /*
-** renderPicturesArray - принимает массив объектов из серверного запроса
-** каждый объект передает в getPicture и записывает результат в док.фрагмент
-** после добавляет весь фрагмент в контейнер для фотографий
-*/
-  var renderPicturesArray = function (data) {
-    var picturesContainer = document.querySelector('.pictures');
-    var pictureFragment = document.createDocumentFragment();
-    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
-      pictureFragment.appendChild(getPicture(data[i]));
-      photos.push(data[i]);
+    // убрать фотографии со страницы
+    while (picturesElement.contains(picturesElement.querySelector('.picture'))) {
+      picturesElement.removeChild(picturesElement.lastChild);
     }
-    picturesContainer.appendChild(pictureFragment);
+
+    var fragment = document.createDocumentFragment();
+    photoData.forEach(function (photo) {
+      var picturesTemplate = document.querySelector('#picture').content;
+      var picturesTemplateElement = picturesTemplate.querySelector('.picture');
+      var pictureElement = picturesTemplateElement.cloneNode(true);
+      var pictureUrl = pictureElement.querySelector('.picture__img');
+      pictureUrl.src = photo.url;
+      var pictureLikes = pictureElement.querySelector('.picture__likes');
+      pictureLikes.textContent = photo.likes;
+      var commentSpan = pictureElement.querySelector('.picture__comments');
+      commentSpan.textContent = photo.comments.length;
+      fragment.appendChild(pictureElement);
+    });
+    picturesElement.appendChild(fragment);
   };
 
+  var renderPictures = function (data) {
+    var imgSortElement = document.querySelector('.img-filters');
+    var imgSortFormElement = imgSortElement.querySelector('form');
 
+    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
+      var photoInfo = data[i];
+      photos.push(photoInfo);
+      copy.push(photoInfo);
+    }
+    createPictures(photos);
+    imgSortElement.classList.remove('img-filters--inactive');
+    imgSortFormElement.addEventListener('click', sortButtonsClickHandler);
+
+  };
+
+  var bigPicturePicker = function (array, src) {
+    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
+      if (array[i].url === src) {
+        return array[i];
+      }
+    }
+    return null;
+  };
+
+  window.backend.download(renderPictures);
   var picturesPreviewList = document.querySelector('.pictures');
 
-
+  /*
+* клик срабатывает только на превью картинки
+*/
   var picturePreviewClickHandler = function (evt) {
     var src = '';
     if (evt.target.tagName === 'A' && evt.target.classList.contains('picture')) {
@@ -57,15 +75,60 @@
     }
   };
 
-  var bigPicturePicker = function (array, src) {
-    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
-      if (array[i].url === src) {
-        return array[i];
+  var sortNewPhotos = function () {
+    var randomPhoto;
+    var randomPhotos = [];
+    while (randomPhotos.length < MAX_NEW_PHOTOS) {
+      randomPhoto = window.utility.getRandomArrayElem(copy);
+      if (randomPhotos.indexOf(randomPhoto) === -1) {
+        randomPhotos.push(randomPhoto);
       }
     }
-    return null;
+    createPictures(randomPhotos);
   };
 
-  window.backend.download(renderPicturesArray);
+  var sortDiscussed = function () {
+    copy.sort(function (a, b) {
+      if (a.comments.length < b.comments.length) {
+        return 1;
+      } else if (a.comments.length > b.comments.length) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    createPictures(copy);
+  };
+
+  var sortButtonsClickHandler = function (evt) {
+    var clickedButton = evt.target;
+    var buttons = document.querySelectorAll('.img-filters__button');
+    var activeClass = 'img-filters__button--active';
+    buttons.forEach(function (button) {
+      if (button.classList.contains(activeClass)) {
+        button.classList.remove(activeClass);
+      }
+    });
+    clickedButton.classList.add(activeClass);
+
+    switch (clickedButton.getAttribute('id')) {
+      case 'filter-popular':
+        window.debounce(createPictures(photos));
+        break;
+      case 'filter-new':
+        window.debounce(sortNewPhotos);
+        break;
+      case 'filter-discussed':
+        window.debounce(sortDiscussed);
+        break;
+
+    }
+  };
+
+
   picturesPreviewList.addEventListener('click', picturePreviewClickHandler);
+
+  window.gallery = {
+
+  };
 })();
