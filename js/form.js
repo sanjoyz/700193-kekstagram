@@ -13,12 +13,6 @@
   var uploadFileField = document.querySelector('#upload-file');
   var form = document.querySelector('.img-upload__form');
 
-  var restoreUploadFieldToDefault = function () {
-    imgUploadPreview.firstElementChild.className = '';
-    uploadFileField.value = '';
-    editForm.classList.add('hidden');
-  };
-
   var openPopup = function () {
     editForm.classList.remove('hidden');
     imgUploadEffectLevel.classList.add('hidden');
@@ -27,15 +21,16 @@
   };
 
   var closePopup = function () {
-    restoreUploadFieldToDefault();
+    editForm.classList.add('hidden');
+    uploadFileField.value = '';
+    imgUploadPreview.firstElementChild.className = '';
   };
-
 
   uploadFileField.addEventListener('change', openPopup);
 
   document.addEventListener('keyup', function () {
     if (window.utility.isEscEvent(event) && document.activeElement !== commentTextArea && document.activeElement !== hashtagsInput) {
-      restoreUploadFieldToDefault();
+      closePopup();
     }
   });
   buttonUploadCanel.addEventListener('click', closePopup);
