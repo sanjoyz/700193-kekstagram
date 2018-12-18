@@ -95,7 +95,7 @@
   };
 
   var closeBigPictureHandler = function (evt) {
-    if (window.utility.isEscEvent || evt.type === 'click') {
+    if (window.utility.isEscEvent(evt) || evt.type === 'click') {
       bigPictureElement.classList.add('hidden');
       showMoreCommentsElement.removeEventListener('click', showMoreClickHandler);
       closeBigPicture.removeEventListener('click', closeBigPictureHandler);

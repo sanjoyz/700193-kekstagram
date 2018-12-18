@@ -13,24 +13,29 @@
   var uploadFileField = document.querySelector('#upload-file');
   var form = document.querySelector('.img-upload__form');
 
+  var restoreUploadFieldToDefault = function () {
+    imgUploadPreview.firstElementChild.className = '';
+    uploadFileField.value = '';
+    editForm.classList.add('hidden');
+  };
 
   var openPopup = function () {
     editForm.classList.remove('hidden');
     imgUploadEffectLevel.classList.add('hidden');
+    document.querySelector('.scale__control--value').value = '100%';
+    imgUploadPreview.style.transform = 'scale(1)';
   };
 
   var closePopup = function () {
-    editForm.classList.add('hidden');
-    imgUploadPreview.firstElementChild.className = '';
-    uploadFileField.value = '';
+    restoreUploadFieldToDefault();
   };
 
 
   uploadFileField.addEventListener('change', openPopup);
+
   document.addEventListener('keyup', function () {
-    if (window.utility.isEscEvent && document.activeElement !== commentTextArea && document.activeElement !== hashtagsInput) {
-      editForm.classList.add('hidden');
-      imgUploadPreview.firstElementChild.className = '';
+    if (window.utility.isEscEvent(event) && document.activeElement !== commentTextArea && document.activeElement !== hashtagsInput) {
+      restoreUploadFieldToDefault();
     }
   });
   buttonUploadCanel.addEventListener('click', closePopup);
@@ -79,7 +84,7 @@
 **/
   var scaleSmallerControl = document.querySelector('.scale__control--smaller');
   var scaleBiggerControl = document.querySelector('.scale__control--bigger');
-  document.querySelector('.scale__control--value').value = '100%'; //  дефолт зума 100%, подумать как улучшить
+
 
   var scaleValueChangeHandler = function (value) {
     imgUploadPreview.style.transform = 'scale(' + parseInt(value, 10) / 100 + ')';
@@ -88,7 +93,7 @@
   var scaleControlClickHandler = function () {
     var scaleControlValue = document.querySelector('.scale__control--value').value;
     var controlValueInt = parseInt(scaleControlValue, 10);
-    if (event.target === scaleSmallerControl && controlValueInt > 0) {
+    if (event.target === scaleSmallerControl && controlValueInt > 25) {
       controlValueInt -= 25;
     } else if (event.target === scaleBiggerControl && controlValueInt < 100) {
       controlValueInt += 25;
