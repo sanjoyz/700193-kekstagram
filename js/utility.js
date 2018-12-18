@@ -7,7 +7,7 @@
   };
 
   var getRandomNumber = function (min, max) {
-    return Math.round(min + Math.random() * (max - min));
+    return Math.floor(min + Math.random() * (max - min));
   };
 
   var createMessage = function (status, text) {
@@ -32,21 +32,14 @@
 
   };
 
-  var shuffleArray = function (array) {
-    var copy = array.slice(0);
-    for (var i = copy.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = copy[i];
-      copy[i] = copy[j];
-      copy[j] = temp;
-    }
-    return copy;
+  var getRandomArrayElem = function (arr) {
+    return arr[getRandomNumber(0, arr.length)];
   };
 
   window.utility = {
     isEscEvent: isEscEvent,
     getRandomNumber: getRandomNumber,
     createMessage: createMessage,
-    shuffleArray: shuffleArray
+    getRandomArrayElem: getRandomArrayElem
   };
 })();

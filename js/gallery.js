@@ -75,9 +75,16 @@
     }
   };
 
-  var sortNewPhotos = function (arr) {
-    var randomImages = window.utility.shuffleArray(arr).slice(0, MAX_NEW_PHOTOS);
-    createPictures(randomImages);
+  var sortNewPhotos = function () {
+    var randomPhoto;
+    var randomPhotos = [];
+    while (randomPhotos.length < MAX_NEW_PHOTOS) {
+      randomPhoto = window.utility.getRandomArrayElem(copy);
+      if (randomPhotos.indexOf(randomPhoto) === -1) {
+        randomPhotos.push(randomPhoto);
+      }
+    }
+    createPictures(randomPhotos);
   };
 
   var sortDiscussed = function () {
