@@ -118,6 +118,6 @@
   };
 
   window.bigPicture = {
-    renderBigPicture: renderBigPicture
+    render: renderBigPicture
   };
 })();

@@ -67,7 +67,7 @@
     }
     if (src) {
       var elem = pickBigPicture(photos, src);
-      window.bigPicture.renderBigPicture(elem);
+      window.bigPicture.render(elem);
     }
   };
 
