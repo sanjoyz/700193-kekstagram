@@ -148,20 +148,13 @@
 
 
   // Фильтры
-  var effectsListMap = {
-    'chrome': 'effects__preview--chrome',
-    'sepia': 'effects__preview--sepia',
-    'marvin': 'effects__preview--marvin',
-    'phobos': 'effects__preview--phobos',
-    'heat': 'effects__preview--heat'
-  };
   var effectClassName;
   var imgUploadPreview = document.querySelector('.img-upload__preview');
   var pic = imgUploadPreview.firstElementChild;
   var imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
   var effectsItemClickHandler = function (evt) {
     imgUploadEffectLevel.classList.remove('hidden');
-    effectClassName = effectsListMap[evt.target.value];
+    effectClassName = 'effects__preview--' + evt.target.value;
     pic.className = '';
     pic.style = '';
     pic.classList.add(effectClassName);
