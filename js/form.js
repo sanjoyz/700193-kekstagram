@@ -20,6 +20,7 @@
     imgUploadEffectLevel.classList.add('hidden');
     document.querySelector('.scale__control--value').value = '100%';
     imgUploadPreview.style.transform = 'scale(1)';
+    buttonUploadCanel.addEventListener('click', closePopup);
   };
 
   var closePopup = function () {
@@ -27,6 +28,9 @@
     uploadFileField.value = '';
     imgUploadPreview.firstElementChild.className = '';
     buttonUploadCanel.removeEventListener('click', closePopup);
+    commentTextArea.value = '';
+    hashtagsInput.value = '';
+
   };
 
   uploadFileField.addEventListener('change', openPopup);
@@ -38,8 +42,6 @@
       closePopup();
     }
   });
-  buttonUploadCanel.addEventListener('click', closePopup);
-
 
   // Валидация форм
   var makeHashtagValidation = function (arr, target) {
@@ -47,7 +49,7 @@
       target.style.outline = '1px solid' + color;
     };
     for (var i = 0; i < arr.length; i++) {
-      if (arr[i][0] !== '#') {
+      if (arr[i][0] !== '#' && arr[0] !== '') {
         outlineColorChanger(HASHTAG_INVALID_COLOR);
         return 'Хеш тег должен начинаться символом #';
       } else if (arr[i].length > MAX_HASHTAG_LENGTH) {
@@ -71,7 +73,7 @@
   };
 
   var hashTagsInputHandler = function (evt) {
-    var hashArr = hashtagsInput.value.split(' ');
+    var hashArr = hashtagsInput.value.trim().replace(/\s+/g, ' ').split(' ');
     var target = evt.target;
     if (makeHashtagValidation(hashArr, target)) {
       target.setCustomValidity(makeHashtagValidation(hashArr, target));
@@ -221,6 +223,7 @@
   };
 
   var formUploadErrorHandler = function () {
+    closePopup();
     window.utility.createMessage('error', 'Ошибка загрузки');
   };
 
