@@ -2,7 +2,7 @@
 
 (function () {
   var URL_GET = 'https://js.dump.academy/kekstagram/data';
-  var URL_POST = 'https://js.dump.academy/kekstagra1m';
+  var URL_POST = 'https://js.dump.academy/kekstagram';
 
   var getXhr = function (xhr, onLoad, onError) {
     xhr.responseType = 'json';
