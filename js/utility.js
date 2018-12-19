@@ -7,7 +7,7 @@
   };
 
   var getRandomNumber = function (min, max) {
-    return Math.floor(min + Math.random() * (max - min));
+    return Math.floor(min + Math.random() * (max + 1 - min));
   };
 
   var createMessage = function (status, text) {
@@ -20,7 +20,7 @@
 
     var hideMessage = function (evt) {
       var target = evt.target;
-      if (target.classList.contains('error__button') || target.classList.contains('success__button') || evt.keyCode === ESC_KEYCODE) {
+      if (target.classList.contains('error__button') || target.classList.contains('success__button') || isEscEvent(evt)) {
         messageContainer.removeEventListener('click', hideMessage);
         document.addEventListener('click', hideMessage);
         messageContainer.parentElement.removeChild(messageContainer);

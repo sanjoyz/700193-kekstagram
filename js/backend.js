@@ -3,12 +3,10 @@
 (function () {
   var URL_GET = 'https://js.dump.academy/kekstagram/data';
   var URL_POST = 'https://js.dump.academy/kekstagram';
-  /*
-* DRY
-*/
+
   var getXhr = function (xhr, onLoad, onError) {
     xhr.responseType = 'json';
-    xhr.timeout = '10000';
+    xhr.timeout = 10000;
 
     xhr.addEventListener('load', function () {
       var error;

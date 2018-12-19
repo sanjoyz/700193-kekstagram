@@ -1,8 +1,6 @@
 'use strict';
 
-/**
-* Создание галереи миниатюр
-*/
+// Создание галереи миниатюр
 (function () {
   var MAX_NEW_PHOTOS = 10;
   var PHOTOS_QUANTITY = 25;
@@ -11,22 +9,24 @@
   var copy = [];
   var createPictures = function (photoData) {
 
-    // убрать фотографии со страницы
+    // Убираем фотографии со страницы
     while (picturesElement.contains(picturesElement.querySelector('.picture'))) {
       picturesElement.removeChild(picturesElement.lastChild);
     }
-
+    // Создаем фрагмент и наполняем его фотографиями
     var fragment = document.createDocumentFragment();
     photoData.forEach(function (photo) {
       var picturesTemplate = document.querySelector('#picture').content;
       var picturesTemplateElement = picturesTemplate.querySelector('.picture');
       var pictureElement = picturesTemplateElement.cloneNode(true);
       var pictureUrl = pictureElement.querySelector('.picture__img');
-      pictureUrl.src = photo.url;
       var pictureLikes = pictureElement.querySelector('.picture__likes');
-      pictureLikes.textContent = photo.likes;
       var commentSpan = pictureElement.querySelector('.picture__comments');
-      commentSpan.textContent = photo.comments.length;
+      if (typeof photo !== 'undefined') {
+        pictureUrl.src = photo.url;
+        pictureLikes.textContent = photo.likes.toString();
+        commentSpan.textContent = photo.comments.length.toString();
+      }
       fragment.appendChild(pictureElement);
     });
     picturesElement.appendChild(fragment);
@@ -36,11 +36,11 @@
     var imgSortElement = document.querySelector('.img-filters');
     var imgSortFormElement = imgSortElement.querySelector('form');
 
-    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
-      var photoInfo = data[i];
+    data.forEach(function (photoInfo) {
       photos.push(photoInfo);
       copy.push(photoInfo);
-    }
+    });
+
     createPictures(photos);
     imgSortElement.classList.remove('img-filters--inactive');
     imgSortFormElement.addEventListener('click', sortButtonsClickHandler);
@@ -57,11 +57,7 @@
   };
 
   window.backend.download(renderPictures);
-  var picturesPreviewList = document.querySelector('.pictures');
 
-  /*
-* клик срабатывает только на превью картинки
-*/
   var picturePreviewClickHandler = function (evt) {
     var src = '';
     if (evt.target.tagName === 'A' && evt.target.classList.contains('picture')) {
@@ -71,15 +67,16 @@
       src = evt.target.attributes.src.nodeValue;
     }
     if (src) {
-      window.bigPicture.renderBigPicture(bigPicturePicker(photos, src));
+      var elem = bigPicturePicker(photos, src);
+      window.bigPicture.renderBigPicture(elem);
     }
   };
 
+  // Сортировки "Новые" "Популярные" "Обсуждаемые"
   var sortNewPhotos = function () {
-    var randomPhoto;
     var randomPhotos = [];
     while (randomPhotos.length < MAX_NEW_PHOTOS) {
-      randomPhoto = window.utility.getRandomArrayElem(copy);
+      var randomPhoto = window.utility.getRandomArrayElem(copy);
       if (randomPhotos.indexOf(randomPhoto) === -1) {
         randomPhotos.push(randomPhoto);
       }
@@ -93,9 +90,8 @@
         return 1;
       } else if (a.comments.length > b.comments.length) {
         return -1;
-      } else {
-        return 0;
       }
+      return 0;
     });
     createPictures(copy);
   };
@@ -121,14 +117,10 @@
       case 'filter-discussed':
         window.debounce(sortDiscussed);
         break;
-
     }
   };
 
-
+  var picturesPreviewList = document.querySelector('.pictures');
   picturesPreviewList.addEventListener('click', picturePreviewClickHandler);
 
-  window.gallery = {
-
-  };
 })();
