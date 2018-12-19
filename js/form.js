@@ -189,16 +189,22 @@
   };
 
   var effectLevelChanger = function (ratio) {
-    if (effectClassName === 'effects__preview--chrome') {
-      pic.style.filter = 'grayscale(' + ratio + ')';
-    } else if (effectClassName === 'effects__preview--sepia') {
-      pic.style.filter = 'sepia(' + ratio + ')';
-    } else if (effectClassName === 'effects__preview--marvin') {
-      pic.style.filter = 'invert(' + ratio * 100 + '%)';
-    } else if (effectClassName === 'effects__preview--phobos') {
-      pic.style.filter = 'blur(' + ratio * 3 + 'px)';
-    } else if (effectClassName === 'effects__preview--heat') {
-      pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+    switch (effectClassName) {
+      case 'effects__preview--chrome':
+        pic.style.filter = 'grayscale(' + ratio + ')';
+        break;
+      case 'effects__preview--sepia':
+        pic.style.filter = 'sepia(' + ratio + ')';
+        break;
+      case 'effects__preview--marvin':
+        pic.style.filter = 'invert(' + ratio * 100 + '%)';
+        break;
+      case 'effects__preview--phobos':
+        pic.style.filter = 'blur(' + ratio * 3 + 'px)';
+        break;
+      case 'effects__preview--heat':
+        pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+        break;
     }
   };
 
