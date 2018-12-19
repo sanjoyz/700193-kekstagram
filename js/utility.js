@@ -32,7 +32,7 @@
   };
 
   var getRandomArrayElem = function (arr) {
-    return arr[getRandomNumber(0, arr.length)];
+    return arr[getRandomNumber(0, arr.length - 1)];
   };
 
   window.utility = {
