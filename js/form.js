@@ -167,9 +167,9 @@
 
   var effectsList = document.querySelectorAll('.effects__item');
   var effectsListener = function () {
-    for (var i = 0; i < effectsList.length; i++) {
-      effectsList[i].addEventListener('click', effectsItemClickHandler);
-    }
+    effectsList.forEach(function (effect) {
+      effect.addEventListener('click', effectsItemClickHandler);
+    });
   };
   effectsListener();
 

@@ -19,7 +19,6 @@
     while (commentsElement.children.length > 0) {
       commentsElement.removeChild(commentsElement.lastChild);
     }
-
     for (var i = 0; i < elem.comments.length; i++) {
       var listItemElement = createElement('li', 'social__comment');
       var imgElement = createImgElement('social__picture', elem.comments[i]);
