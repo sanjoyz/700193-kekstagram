@@ -6,6 +6,8 @@
   var SCALE_STEP = 25;
   var MAX_SCALE_VALUE = 100;
   var HASHTAG_INVALID_COLOR = '#f45f42';
+  var ARROW_RIGHT_KEY_CODE = 39;
+  var ARROW_LEFT_KEY_CODE = 37;
 
   // Загрузка фотографий
   var commentTextArea = document.querySelector('.text__description');
@@ -21,6 +23,7 @@
     document.querySelector('.scale__control--value').value = '100%';
     imgUploadPreview.style.transform = 'scale(1)';
     buttonUploadCanel.addEventListener('click', closePopup);
+    filterPin.addEventListener('keydown', filterPinKeyDownHandler);
   };
 
   var closePopup = function () {
@@ -28,6 +31,7 @@
     uploadFileField.value = '';
     imgUploadPreview.firstElementChild.className = '';
     buttonUploadCanel.removeEventListener('click', closePopup);
+    filterPin.removeEventListener('keydown', filterPinKeyDownHandler);
     commentTextArea.value = '';
     hashtagsInput.value = '';
   };
@@ -138,7 +142,7 @@
 
     var filterPinMouseUpHandler = function () {
       evt.preventDefault();
-      document.removeEventListener('mousemove', filterPinMouseMoveHandler); // filterPin.removeEventListener('mousemove', filterPinMouseMoveHandler); почему так не работает?
+      document.removeEventListener('mousemove', filterPinMouseMoveHandler);
       document.removeEventListener('mouseup', filterPinMouseUpHandler);
     };
 
@@ -146,6 +150,20 @@
     document.addEventListener('mouseup', filterPinMouseUpHandler);
   });
 
+  var filterPinKeyDownHandler = function (evt) {
+    var shift = 7;
+    if (evt.keyCode === ARROW_RIGHT_KEY_CODE) {
+      shift = -shift;
+    } else if (evt.keyCode === ARROW_LEFT_KEY_CODE) {
+      shift = +shift;
+    }
+    if ((filterPin.offsetLeft - shift) > 0 && (filterPin.offsetLeft - shift) < pinLine.offsetWidth) {
+      filterPin.style.left = (filterPin.offsetLeft - shift) + 'px';
+    }
+    effectLevelDepth.style.width = filterPin.style.left;
+    var ratio = calculateEffectDepth();
+    effectLevelChanger(ratio);
+  };
 
   // Фильтры
   var effectClassName;
