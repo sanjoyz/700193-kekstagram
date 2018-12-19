@@ -223,6 +223,7 @@
   };
 
   var formUploadErrorHandler = function () {
+    closePopup();
     window.utility.createMessage('error', 'Ошибка загрузки');
   };
 
