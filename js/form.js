@@ -30,7 +30,6 @@
     buttonUploadCanel.removeEventListener('click', closePopup);
     commentTextArea.value = '';
     hashtagsInput.value = '';
-
   };
 
   uploadFileField.addEventListener('change', openPopup);
@@ -171,7 +170,6 @@
     }
     effectLevelDepth.style.width = DEFAULT_FILTER_PIN_POSITION;
     filterPin.style.left = DEFAULT_FILTER_PIN_POSITION;
-
   };
 
   var effectsList = document.querySelectorAll('.effects__item');
@@ -231,6 +229,5 @@
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.upload(new FormData(form), formUploadSuccesHandler, formUploadErrorHandler);
-
   });
 })();

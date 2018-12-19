@@ -87,7 +87,6 @@
         showMoreCommentsElement.classList.remove('visually-hidden');
       }
     }
-
     showMoreCommentsElement.addEventListener('click', showMoreClickHandler);
     closeBigPicture.addEventListener('click', closeBigPictureHandler);
     window.addEventListener('keydown', closeBigPictureHandler);
@@ -112,18 +111,14 @@
       i--;
       hiddenComments--;
     }
-
     if (!hiddenComments) {
       showMoreCommentsElement.classList.add('visually-hidden');
     }
-
     var visibleComments = bigPictureElement.querySelectorAll('.social__comment').length - hiddenComments;
-
     changeShownComments(visibleComments);
   };
 
   window.bigPicture = {
     renderBigPicture: renderBigPicture
   };
-
 })();

@@ -44,7 +44,6 @@
     createPictures(photos);
     imgSortElement.classList.remove('img-filters--inactive');
     imgSortFormElement.addEventListener('click', sortButtonsClickHandler);
-
   };
 
   var bigPicturePicker = function (array, src) {
@@ -122,5 +121,4 @@
 
   var picturesPreviewList = document.querySelector('.pictures');
   picturesPreviewList.addEventListener('click', picturePreviewClickHandler);
-
 })();
