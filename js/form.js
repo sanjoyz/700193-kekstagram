@@ -3,9 +3,11 @@
   var DEFAULT_FILTER_PIN_POSITION = '100%';
   var MAX_HASHTAG_LENGTH = 20;
   var MAX_HASHTAG_COUNT = 5;
-  /*
-* Загрузка фотографий
-**/
+  var SCALE_STEP = 25;
+  var MAX_SCALE_VALUE = 100;
+  var HASHTAG_INVALID_COLOR = '#f45f42';
+
+  // Загрузка фотографий
   var commentTextArea = document.querySelector('.text__description');
   var hashtagsInput = document.querySelector('.text__hashtags');
   var editForm = document.querySelector('.img-upload__overlay');
@@ -13,46 +15,54 @@
   var uploadFileField = document.querySelector('#upload-file');
   var form = document.querySelector('.img-upload__form');
 
-
   var openPopup = function () {
     editForm.classList.remove('hidden');
     imgUploadEffectLevel.classList.add('hidden');
+    document.querySelector('.scale__control--value').value = '100%';
+    imgUploadPreview.style.transform = 'scale(1)';
   };
 
   var closePopup = function () {
     editForm.classList.add('hidden');
-    imgUploadPreview.firstElementChild.className = '';
     uploadFileField.value = '';
+    imgUploadPreview.firstElementChild.className = '';
+    buttonUploadCanel.removeEventListener('click', closePopup);
   };
 
-
   uploadFileField.addEventListener('change', openPopup);
-  document.addEventListener('keyup', function () {
-    if (window.utility.isEscEvent && document.activeElement !== commentTextArea && document.activeElement !== hashtagsInput) {
-      editForm.classList.add('hidden');
-      imgUploadPreview.firstElementChild.className = '';
+
+  window.addEventListener('keyup', function (event) {
+    if (window.utility.isEscEvent(event)
+    && document.activeElement !== commentTextArea
+    && document.activeElement !== hashtagsInput) {
+      closePopup();
     }
   });
   buttonUploadCanel.addEventListener('click', closePopup);
 
-  /**
-** Валидация форм
-**/
 
+  // Валидация форм
   var makeHashtagValidation = function (arr, target) {
+    var outlineColorChanger = function (color) {
+      target.style.outline = '1px solid' + color;
+    };
     for (var i = 0; i < arr.length; i++) {
       if (arr[i][0] !== '#') {
-        target.style.border = '1px solid red';
+        outlineColorChanger(HASHTAG_INVALID_COLOR);
         return 'Хеш тег должен начинаться символом #';
       } else if (arr[i].length > MAX_HASHTAG_LENGTH) {
+        outlineColorChanger(HASHTAG_INVALID_COLOR);
         return 'Длина хеш тега не должна превышать ' + MAX_HASHTAG_LENGTH + ' ';
       } else if (arr.length > MAX_HASHTAG_COUNT) {
+        outlineColorChanger(HASHTAG_INVALID_COLOR);
         return 'Хеш тегов не может быть больше ' + MAX_HASHTAG_COUNT;
       } else if (arr[i][0] === '#' && arr[i].length < 2) {
+        outlineColorChanger(HASHTAG_INVALID_COLOR);
         return 'Хеш тег не может состоять из одной решётки';
       }
       for (var j = i + 1; j < arr.length; j++) {
         if (arr[i].toUpperCase() === arr[j].toUpperCase()) {
+          outlineColorChanger(HASHTAG_INVALID_COLOR);
           return 'Один и тот же хеш-тег не может быть использован дважды';
         }
       }
@@ -61,25 +71,22 @@
   };
 
   var hashTagsInputHandler = function (evt) {
-    var hashArr = [];
-    hashArr = hashtagsInput.value.split(' ');
+    var hashArr = hashtagsInput.value.split(' ');
     var target = evt.target;
-    if (makeHashtagValidation(hashArr)) {
+    if (makeHashtagValidation(hashArr, target)) {
       target.setCustomValidity(makeHashtagValidation(hashArr, target));
     } else {
       target.setCustomValidity('');
-      target.style.border = '';
+      target.style.outline = '';
     }
   };
   hashtagsInput.addEventListener('input', hashTagsInputHandler);
 
 
-  /*
-* масштаб превью
-**/
+  // Масштаб превью
   var scaleSmallerControl = document.querySelector('.scale__control--smaller');
   var scaleBiggerControl = document.querySelector('.scale__control--bigger');
-  document.querySelector('.scale__control--value').value = '100%'; //  дефолт зума 100%, подумать как улучшить
+
 
   var scaleValueChangeHandler = function (value) {
     imgUploadPreview.style.transform = 'scale(' + parseInt(value, 10) / 100 + ')';
@@ -88,10 +95,10 @@
   var scaleControlClickHandler = function () {
     var scaleControlValue = document.querySelector('.scale__control--value').value;
     var controlValueInt = parseInt(scaleControlValue, 10);
-    if (event.target === scaleSmallerControl && controlValueInt > 0) {
-      controlValueInt -= 25;
-    } else if (event.target === scaleBiggerControl && controlValueInt < 100) {
-      controlValueInt += 25;
+    if (event.target === scaleSmallerControl && controlValueInt > SCALE_STEP) {
+      controlValueInt -= SCALE_STEP;
+    } else if (event.target === scaleBiggerControl && controlValueInt < MAX_SCALE_VALUE) {
+      controlValueInt += SCALE_STEP;
     }
     document.querySelector('.scale__control--value').value = controlValueInt + '%';
     scaleValueChangeHandler(controlValueInt);
@@ -101,10 +108,7 @@
   scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
 
 
-  /*
-* Движение слайдера эффектов
-**/
-
+  // Движение слайдера эффектов
   var filterPin = document.querySelector('.effect-level__pin');
   var pinLine = document.querySelector('.effect-level__line');
   var effectLevelDepth = document.querySelector('.effect-level__depth');
@@ -142,9 +146,7 @@
   });
 
 
-  /*
-* фильтры
-**/
+  // Фильтры
   var effectsListMap = {
     'chrome': 'effects__preview--chrome',
     'sepia': 'effects__preview--sepia',
@@ -178,10 +180,8 @@
   };
   effectsListener();
 
-  /*
-* Расчет глубины фильтров
-**/
 
+  // Расчет глубины фильтров
   var calculateEffectDepth = function () {
     var pinPosition = filterPin.offsetLeft;
     var effectDepth = (pinPosition * 100) / pinLine.offsetWidth;
@@ -202,9 +202,8 @@
     }
   };
 
-  /*
-** Работа с отправкой формы
-*/
+
+  // Работа с отправкой формы
   var formRestoreDefault = function () {
     var file = document.querySelector('#upload-file');
     file.value = '';

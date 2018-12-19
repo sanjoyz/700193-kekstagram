@@ -47,8 +47,7 @@
 
   var createImgElement = function (className, commentObject) {
     var someImgElement = createElement('img', className);
-    var src = commentObject.avatar;
-    someImgElement.src = src;
+    someImgElement.src = commentObject.avatar;
     someImgElement.alt = commentObject.name;
     someImgElement.width = AVATAR_RANDOM_USER_WIDTH;
     someImgElement.height = AVATAR_RANDOM_USER_HEIGHT;
@@ -58,10 +57,10 @@
   var changeShownComments = function (commentsShow) {
     var textElement = commentsMessageElement.childNodes[0];
     var message = textElement.textContent;
-    message = message.split(' ');
-    message.shift();
-    message.unshift(commentsShow);
-    message = message.join(' ');
+    var messageChanged = message.split(' ');
+    messageChanged.shift();
+    messageChanged.unshift(commentsShow);
+    message = messageChanged.join(' ');
     textElement.textContent = message;
   };
 
@@ -95,7 +94,7 @@
   };
 
   var closeBigPictureHandler = function (evt) {
-    if (window.utility.isEscEvent || evt.type === 'click') {
+    if (window.utility.isEscEvent(evt) || evt.type === 'click') {
       bigPictureElement.classList.add('hidden');
       showMoreCommentsElement.removeEventListener('click', showMoreClickHandler);
       closeBigPicture.removeEventListener('click', closeBigPictureHandler);
@@ -122,7 +121,6 @@
 
     changeShownComments(visibleComments);
   };
-
 
   window.bigPicture = {
     renderBigPicture: renderBigPicture
