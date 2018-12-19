@@ -10,13 +10,13 @@
   // Загрузка фотографий
   var commentTextArea = document.querySelector('.text__description');
   var hashtagsInput = document.querySelector('.text__hashtags');
-  var editForm = document.querySelector('.img-upload__overlay');
-  var buttonUploadCanel = editForm.querySelector('#upload-cancel');
+  var imgUploadOverlay = document.querySelector('.img-upload__overlay');
+  var buttonUploadCanel = imgUploadOverlay.querySelector('#upload-cancel');
   var uploadFileField = document.querySelector('#upload-file');
   var form = document.querySelector('.img-upload__form');
 
   var openPopup = function () {
-    editForm.classList.remove('hidden');
+    imgUploadOverlay.classList.remove('hidden');
     imgUploadEffectLevel.classList.add('hidden');
     document.querySelector('.scale__control--value').value = '100%';
     imgUploadPreview.style.transform = 'scale(1)';
@@ -24,7 +24,7 @@
   };
 
   var closePopup = function () {
-    editForm.classList.add('hidden');
+    imgUploadOverlay.classList.add('hidden');
     uploadFileField.value = '';
     imgUploadPreview.firstElementChild.className = '';
     buttonUploadCanel.removeEventListener('click', closePopup);
@@ -211,11 +211,11 @@
     hashtagsInput.value = '';
   };
 
-  var formUploadSuccesHandler = function () {
+  var formUploadSuccessHandler = function () {
     var uploadImg = imgUploadPreview.firstElementChild;
     uploadImg.style = '';
     uploadImg.classList = '';
-    editForm.classList.add('hidden');
+    imgUploadOverlay.classList.add('hidden');
     formRestoreDefault();
     window.utility.createMessage('success', 'Загрузка успешна');
   };
@@ -228,6 +228,6 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(form), formUploadSuccesHandler, formUploadErrorHandler);
+    window.backend.upload(new FormData(form), formUploadSuccessHandler, formUploadErrorHandler);
   });
 })();
