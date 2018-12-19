@@ -6,7 +6,7 @@
   var PHOTOS_QUANTITY = 25;
   var photos = [];
   var picturesElement = document.querySelector('.pictures');
-  var copy = [];
+  var copies = [];
   var createPictures = function (photoData) {
 
     // Убираем фотографии со страницы
@@ -38,7 +38,7 @@
 
     data.forEach(function (photoInfo) {
       photos.push(photoInfo);
-      copy.push(photoInfo);
+      copies.push(photoInfo);
     });
 
     createPictures(photos);
@@ -46,7 +46,7 @@
     imgSortFormElement.addEventListener('click', sortButtonsClickHandler);
   };
 
-  var bigPicturePicker = function (array, src) {
+  var pickBigPicture = function (array, src) {
     for (var i = 0; i < PHOTOS_QUANTITY; i++) {
       if (array[i].url === src) {
         return array[i];
@@ -66,7 +66,7 @@
       src = evt.target.attributes.src.nodeValue;
     }
     if (src) {
-      var elem = bigPicturePicker(photos, src);
+      var elem = pickBigPicture(photos, src);
       window.bigPicture.renderBigPicture(elem);
     }
   };
@@ -75,7 +75,7 @@
   var sortNewPhotos = function () {
     var randomPhotos = [];
     while (randomPhotos.length < MAX_NEW_PHOTOS) {
-      var randomPhoto = window.utility.getRandomArrayElem(copy);
+      var randomPhoto = window.utility.getRandomArrayElem(copies);
       if (randomPhotos.indexOf(randomPhoto) === -1) {
         randomPhotos.push(randomPhoto);
       }
@@ -84,7 +84,7 @@
   };
 
   var sortDiscussed = function () {
-    copy.sort(function (a, b) {
+    copies.sort(function (a, b) {
       if (a.comments.length < b.comments.length) {
         return 1;
       } else if (a.comments.length > b.comments.length) {
@@ -92,7 +92,7 @@
       }
       return 0;
     });
-    createPictures(copy);
+    createPictures(copies);
   };
 
   var sortButtonsClickHandler = function (evt) {

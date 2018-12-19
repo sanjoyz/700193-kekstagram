@@ -71,8 +71,8 @@
     bigPictureElement.classList.remove('hidden');
     bigPictureElement.querySelector('.big-picture__img img').src = elem.url;
     bigPictureElement.querySelector('.big-picture__img img').alt = alt;
-    bigPictureElement.querySelector('.likes-count').textContent = elem.likes;
-    bigPictureElement.querySelector('.comments-count').textContent = elem.comments.length;
+    bigPictureElement.querySelector('.likes-count').textContent = elem.likes.toString();
+    bigPictureElement.querySelector('.comments-count').textContent = elem.comments.length.toString();
     insertCommentListElement(elem);
     socialCaptionElement.textContent = elem.description;
 
