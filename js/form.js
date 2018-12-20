@@ -6,31 +6,34 @@
   var SCALE_STEP = 25;
   var MAX_SCALE_VALUE = 100;
   var HASHTAG_INVALID_COLOR = '#f45f42';
+  var ARROW_RIGHT_KEY_CODE = 39;
+  var ARROW_LEFT_KEY_CODE = 37;
 
   // Загрузка фотографий
   var commentTextArea = document.querySelector('.text__description');
   var hashtagsInput = document.querySelector('.text__hashtags');
-  var editForm = document.querySelector('.img-upload__overlay');
-  var buttonUploadCanel = editForm.querySelector('#upload-cancel');
+  var imgUploadOverlay = document.querySelector('.img-upload__overlay');
+  var buttonUploadCanel = imgUploadOverlay.querySelector('#upload-cancel');
   var uploadFileField = document.querySelector('#upload-file');
   var form = document.querySelector('.img-upload__form');
 
   var openPopup = function () {
-    editForm.classList.remove('hidden');
+    imgUploadOverlay.classList.remove('hidden');
     imgUploadEffectLevel.classList.add('hidden');
     document.querySelector('.scale__control--value').value = '100%';
     imgUploadPreview.style.transform = 'scale(1)';
     buttonUploadCanel.addEventListener('click', closePopup);
+    filterPin.addEventListener('keydown', filterPinKeyDownHandler);
   };
 
   var closePopup = function () {
-    editForm.classList.add('hidden');
+    imgUploadOverlay.classList.add('hidden');
     uploadFileField.value = '';
     imgUploadPreview.firstElementChild.className = '';
     buttonUploadCanel.removeEventListener('click', closePopup);
-    commentTextArea.value = '';
-    hashtagsInput.value = '';
-
+    filterPin.removeEventListener('keydown', filterPinKeyDownHandler);
+    commentTextArea.removeAttribute('value');
+    hashtagsInput.removeAttribute('value');
   };
 
   uploadFileField.addEventListener('change', openPopup);
@@ -139,7 +142,7 @@
 
     var filterPinMouseUpHandler = function () {
       evt.preventDefault();
-      document.removeEventListener('mousemove', filterPinMouseMoveHandler); // filterPin.removeEventListener('mousemove', filterPinMouseMoveHandler); почему так не работает?
+      document.removeEventListener('mousemove', filterPinMouseMoveHandler);
       document.removeEventListener('mouseup', filterPinMouseUpHandler);
     };
 
@@ -147,22 +150,29 @@
     document.addEventListener('mouseup', filterPinMouseUpHandler);
   });
 
+  var filterPinKeyDownHandler = function (evt) {
+    var shift = 7;
+    if (evt.keyCode === ARROW_RIGHT_KEY_CODE) {
+      shift = -shift;
+    } else if (evt.keyCode === ARROW_LEFT_KEY_CODE) {
+      shift = +shift;
+    }
+    if ((filterPin.offsetLeft - shift) > 0 && (filterPin.offsetLeft - shift) < pinLine.offsetWidth) {
+      filterPin.style.left = (filterPin.offsetLeft - shift) + 'px';
+    }
+    effectLevelDepth.style.width = filterPin.style.left;
+    var ratio = calculateEffectDepth();
+    effectLevelChanger(ratio);
+  };
 
   // Фильтры
-  var effectsListMap = {
-    'chrome': 'effects__preview--chrome',
-    'sepia': 'effects__preview--sepia',
-    'marvin': 'effects__preview--marvin',
-    'phobos': 'effects__preview--phobos',
-    'heat': 'effects__preview--heat'
-  };
   var effectClassName;
   var imgUploadPreview = document.querySelector('.img-upload__preview');
   var pic = imgUploadPreview.firstElementChild;
   var imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
   var effectsItemClickHandler = function (evt) {
     imgUploadEffectLevel.classList.remove('hidden');
-    effectClassName = effectsListMap[evt.target.value];
+    effectClassName = 'effects__preview--' + evt.target.value;
     pic.className = '';
     pic.style = '';
     pic.classList.add(effectClassName);
@@ -171,14 +181,13 @@
     }
     effectLevelDepth.style.width = DEFAULT_FILTER_PIN_POSITION;
     filterPin.style.left = DEFAULT_FILTER_PIN_POSITION;
-
   };
 
   var effectsList = document.querySelectorAll('.effects__item');
   var effectsListener = function () {
-    for (var i = 0; i < effectsList.length; i++) {
-      effectsList[i].addEventListener('click', effectsItemClickHandler);
-    }
+    effectsList.forEach(function (effect) {
+      effect.addEventListener('click', effectsItemClickHandler);
+    });
   };
   effectsListener();
 
@@ -191,16 +200,22 @@
   };
 
   var effectLevelChanger = function (ratio) {
-    if (effectClassName === 'effects__preview--chrome') {
-      pic.style.filter = 'grayscale(' + ratio + ')';
-    } else if (effectClassName === 'effects__preview--sepia') {
-      pic.style.filter = 'sepia(' + ratio + ')';
-    } else if (effectClassName === 'effects__preview--marvin') {
-      pic.style.filter = 'invert(' + ratio * 100 + '%)';
-    } else if (effectClassName === 'effects__preview--phobos') {
-      pic.style.filter = 'blur(' + ratio * 3 + 'px)';
-    } else if (effectClassName === 'effects__preview--heat') {
-      pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+    switch (effectClassName) {
+      case 'effects__preview--chrome':
+        pic.style.filter = 'grayscale(' + ratio + ')';
+        break;
+      case 'effects__preview--sepia':
+        pic.style.filter = 'sepia(' + ratio + ')';
+        break;
+      case 'effects__preview--marvin':
+        pic.style.filter = 'invert(' + ratio * 100 + '%)';
+        break;
+      case 'effects__preview--phobos':
+        pic.style.filter = 'blur(' + ratio * 3 + 'px)';
+        break;
+      case 'effects__preview--heat':
+        pic.style.filter = 'brightness(' + (ratio * 2) + 1 + ')';
+        break;
     }
   };
 
@@ -213,11 +228,11 @@
     hashtagsInput.value = '';
   };
 
-  var formUploadSuccesHandler = function () {
+  var formUploadSuccessHandler = function () {
     var uploadImg = imgUploadPreview.firstElementChild;
     uploadImg.style = '';
     uploadImg.classList = '';
-    editForm.classList.add('hidden');
+    imgUploadOverlay.classList.add('hidden');
     formRestoreDefault();
     window.utility.createMessage('success', 'Загрузка успешна');
   };
@@ -230,7 +245,6 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(form), formUploadSuccesHandler, formUploadErrorHandler);
-
+    window.backend.upload(new FormData(form), formUploadSuccessHandler, formUploadErrorHandler);
   });
 })();

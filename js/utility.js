@@ -29,16 +29,14 @@
 
     messageButton.addEventListener('click', hideMessage);
     document.addEventListener('click', hideMessage);
-
   };
 
   var getRandomArrayElem = function (arr) {
-    return arr[getRandomNumber(0, arr.length)];
+    return arr[getRandomNumber(0, arr.length - 1)];
   };
 
   window.utility = {
     isEscEvent: isEscEvent,
-    getRandomNumber: getRandomNumber,
     createMessage: createMessage,
     getRandomArrayElem: getRandomArrayElem
   };
