@@ -33,8 +33,8 @@
     imgUploadPreview.firstElementChild.removeAttribute('style');
     buttonUploadCanel.removeEventListener('click', closePopup);
     filterPin.removeEventListener('keydown', filterPinKeyDownHandler);
-    commentTextArea.removeAttribute('value');
-    hashtagsInput.removeAttribute('value');
+    commentTextArea.value = '';
+    hashtagsInput.value = '';
   };
 
   uploadFileField.addEventListener('change', openPopup);
