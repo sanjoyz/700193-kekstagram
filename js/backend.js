@@ -3,21 +3,24 @@
 (function () {
   var URL_GET = 'https://js.dump.academy/kekstagram/data';
   var URL_POST = 'https://js.dump.academy/kekstagram';
-
+  var SUCCESS_RESPONSE_CODE = 200;
+  var BAD_REQUEST_RESPONSE_CODE = 400;
+  var NOT_FOUND_RESPONSE_CODE = 404;
+  var TIMEOUT_VALUE = 10000;
   var getXhr = function (xhr, onLoad, onError) {
     xhr.responseType = 'json';
-    xhr.timeout = 10000;
+    xhr.timeout = TIMEOUT_VALUE;
 
     xhr.addEventListener('load', function () {
       var error;
       switch (xhr.status) {
-        case 200:
+        case SUCCESS_RESPONSE_CODE:
           onLoad(xhr.response);
           break;
-        case 400:
+        case BAD_REQUEST_RESPONSE_CODE:
           error = 'Неверный запрос';
           break;
-        case 404:
+        case NOT_FOUND_RESPONSE_CODE:
           error = 'Ничего не найдено';
           break;
         default:
