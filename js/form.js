@@ -30,6 +30,7 @@
     imgUploadOverlay.classList.add('hidden');
     uploadFileField.value = '';
     imgUploadPreview.firstElementChild.className = '';
+    imgUploadPreview.firstElementChild.removeAttribute('style');
     buttonUploadCanel.removeEventListener('click', closePopup);
     filterPin.removeEventListener('keydown', filterPinKeyDownHandler);
     commentTextArea.removeAttribute('value');
