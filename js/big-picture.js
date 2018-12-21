@@ -19,18 +19,17 @@
     while (commentsElement.children.length > 0) {
       commentsElement.removeChild(commentsElement.lastChild);
     }
-    for (var i = 0; i < elem.comments.length; i++) {
+    elem.comments.forEach(function (el, i) {
       var listItemElement = createElement('li', 'social__comment');
-      var imgElement = createImgElement('social__picture', elem.comments[i]);
-      var pElement = createElement('p', 'social__text', elem.comments[i].message);
+      var imgElement = createImgElement('social__picture', el);
+      var pElement = createElement('p', 'social__text', el.message);
       listItemElement.appendChild(imgElement);
       listItemElement.appendChild(pElement);
-
       if (i >= DEFAULT_SHOW_COMMENTS) {
         listItemElement.classList.add('visually-hidden');
       }
       commentsListElement.appendChild(listItemElement);
-    }
+    });
     return commentsListElement;
   };
 
