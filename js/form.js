@@ -52,27 +52,32 @@
     var outlineColorChanger = function (color) {
       target.style.outline = '1px solid' + color;
     };
-    arr.forEach(function (elem) {
+
+    var validityMessage;
+    arr.forEach(function (elem, i) {
       if (elem[0] !== '#' && elem !== '') {
         outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Хеш тег должен начинаться символом #';
+        validityMessage = 'Хеш тег должен начинаться символом #';
       } else if (elem.length > MAX_HASHTAG_LENGTH) {
         outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Длина хеш тега не должна превышать ' + MAX_HASHTAG_LENGTH + ' ';
+        validityMessage = 'Длина хеш тега не должна превышать ' + MAX_HASHTAG_LENGTH + ' ';
       } else if (arr.length > MAX_HASHTAG_COUNT) {
         outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Хеш тегов не может быть больше ' + MAX_HASHTAG_COUNT;
+        validityMessage = 'Хеш тегов не может быть больше ' + MAX_HASHTAG_COUNT;
       } else if (elem === '#' && elem.length < 2) {
         outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Хеш тег не может состоять из одной решётки';
+        validityMessage = 'Хеш тег не может состоять из одной решётки';
       }
-      if (arr.indexOf(elem)) {
-        outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Один и тот же хеш-тег не может быть использован дважды';
+      for (var j = i + 1; j < arr.length; j++) {
+        if (elem.toUpperCase() === arr[j].toUpperCase()) {
+          outlineColorChanger(HASHTAG_INVALID_COLOR);
+          validityMessage = 'Один и тот же хеш-тег не может быть использован дважды';
+        }
       }
-      return false;
     });
-    /*
+    return validityMessage;
+  };
+  /*
     for (var i = 0; i < arr.length; i++) {
       if (arr[i][0] !== '#' && arr[0] !== '') {
         outlineColorChanger(HASHTAG_INVALID_COLOR);
@@ -94,10 +99,9 @@
         }
       }
     }
-
     return false;
-    */
   };
+  */
 
   var hashTagsInputHandler = function (evt) {
     var hashArr = hashtagsInput.value.trim().replace(/\s+/g, ' ').split(' ');
