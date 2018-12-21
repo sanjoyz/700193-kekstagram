@@ -47,12 +47,13 @@
   };
 
   var pickBigPicture = function (array, src) {
-    for (var i = 0; i < PHOTOS_QUANTITY; i++) {
-      if (array[i].url === src) {
-        return array[i];
+    var pic;
+    array.forEach(function (item) {
+      if (item.url === src) {
+        pic = item;
       }
-    }
-    return null;
+    });
+    return pic;
   };
 
   window.backend.download(renderPictures);
