@@ -270,10 +270,15 @@
     window.utility.createMessage('error', 'Ошибка загрузки');
   };
 
-  /* var fileInput = document.querySelector('#upload-file');
+  var fileInput = document.querySelector('#upload-file');
   fileInput.addEventListener('change', function () {
-    imgUploadPreview.firstElementChild.src = fileInput.value;
-  });*/
+    var file = fileInput.files;
+    var fReader = new FileReader();
+    fReader.addEventListener('load', function () {
+      imgUploadPreview.firstElementChild.src = fileInput.value;
+    });
+    fReader.readAsDataUrl(file);
+  });
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
