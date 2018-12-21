@@ -270,6 +270,10 @@
     window.utility.createMessage('error', 'Ошибка загрузки');
   };
 
+  /* var fileInput = document.querySelector('#upload-file');
+  fileInput.addEventListener('change', function () {
+    imgUploadPreview.firstElementChild.src = fileInput.value;
+  });*/
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();

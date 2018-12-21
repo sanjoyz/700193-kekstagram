@@ -54,6 +54,12 @@
       }
     });
     return pic;
+    /* for (var i = 0; i < PHOTOS_QUANTITY; i++) {
+      if (array[i].url === src) {
+        return array[i];
+      }
+    }
+    return null;*/
   };
 
   window.backend.download(renderPictures);
