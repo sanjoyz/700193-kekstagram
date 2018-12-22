@@ -35,6 +35,8 @@
     filterPin.removeEventListener('keydown', filterPinKeyDownHandler);
     commentTextArea.value = '';
     hashtagsInput.value = '';
+    hashtagsInput.setCustomValidity('');
+    hashtagsInput.removeAttribute('style');
   };
 
   uploadFileField.addEventListener('change', openPopup);
