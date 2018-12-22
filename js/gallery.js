@@ -3,7 +3,6 @@
 // Создание галереи миниатюр
 (function () {
   var MAX_NEW_PHOTOS = 10;
-  var PHOTOS_QUANTITY = 25;
   var photos = [];
   var picturesElement = document.querySelector('.pictures');
   var copies = [];
@@ -54,12 +53,6 @@
       }
     });
     return pic;
-    /* for (var i = 0; i < PHOTOS_QUANTITY; i++) {
-      if (array[i].url === src) {
-        return array[i];
-      }
-    }
-    return null;*/
   };
 
   window.backend.download(renderPictures);

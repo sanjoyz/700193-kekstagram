@@ -79,31 +79,6 @@
     });
     return validityMessage;
   };
-  /*
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i][0] !== '#' && arr[0] !== '') {
-        outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Хеш тег должен начинаться символом #';
-      } else if (arr[i].length > MAX_HASHTAG_LENGTH) {
-        outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Длина хеш тега не должна превышать ' + MAX_HASHTAG_LENGTH + ' ';
-      } else if (arr.length > MAX_HASHTAG_COUNT) {
-        outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Хеш тегов не может быть больше ' + MAX_HASHTAG_COUNT;
-      } else if (arr[i][0] === '#' && arr[i].length < 2) {
-        outlineColorChanger(HASHTAG_INVALID_COLOR);
-        return 'Хеш тег не может состоять из одной решётки';
-      }
-      for (var j = i + 1; j < arr.length; j++) {
-        if (arr[i].toUpperCase() === arr[j].toUpperCase()) {
-          outlineColorChanger(HASHTAG_INVALID_COLOR);
-          return 'Один и тот же хеш-тег не может быть использован дважды';
-        }
-      }
-    }
-    return false;
-  };
-  */
 
   var hashTagsInputHandler = function (evt) {
     var hashArr = hashtagsInput.value.trim().replace(/\s+/g, ' ').split(' ');
@@ -121,7 +96,6 @@
   // Масштаб превью
   var scaleSmallerControl = document.querySelector('.scale__control--smaller');
   var scaleBiggerControl = document.querySelector('.scale__control--bigger');
-
 
   var scaleValueChangeHandler = function (value) {
     imgUploadPreview.style.transform = 'scale(' + parseInt(value, 10) / 100 + ')';
@@ -272,14 +246,15 @@
     window.utility.createMessage('error', 'Ошибка загрузки');
   };
 
+  // Отображение загружаемой фотографии в превью
   var fileInput = document.querySelector('#upload-file');
   fileInput.addEventListener('change', function () {
-    var file = fileInput.files;
+    var file = fileInput.files[0];
     var fReader = new FileReader();
     fReader.addEventListener('load', function () {
-      imgUploadPreview.firstElementChild.src = fileInput.value;
+      imgUploadPreview.firstElementChild.src = fReader.result;
     });
-    fReader.readAsDataUrl(file);
+    fReader.readAsDataURL(file);
   });
 
   form.addEventListener('submit', function (evt) {
