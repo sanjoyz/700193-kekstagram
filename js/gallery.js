@@ -71,7 +71,6 @@
     }
   };
 
-
   // Сортировки "Новые" "Популярные" "Обсуждаемые"
   var sortNewPhotos = function () {
     var randomPhotos = [];

@@ -9,7 +9,6 @@
   var ARROW_RIGHT_KEY_CODE = 39;
   var ARROW_LEFT_KEY_CODE = 37;
 
-
   // Загрузка фотографий
   var commentTextArea = document.querySelector('.text__description');
   var hashtagsInput = document.querySelector('.text__hashtags');
@@ -49,7 +48,6 @@
       closePopup();
     }
   });
-
 
   // Валидация форм
   var makeHashtagValidation = function (arr, target) {
@@ -94,7 +92,6 @@
   };
   hashtagsInput.addEventListener('input', hashTagsInputHandler);
 
-
   // Масштаб превью
   var scaleSmallerControl = document.querySelector('.scale__control--smaller');
   var scaleBiggerControl = document.querySelector('.scale__control--bigger');
@@ -114,10 +111,8 @@
     document.querySelector('.scale__control--value').value = controlValueInt + '%';
     scaleValueChangeHandler(controlValueInt);
   };
-
   scaleSmallerControl.addEventListener('click', scaleControlClickHandler);
   scaleBiggerControl.addEventListener('click', scaleControlClickHandler);
-
 
   // Движение слайдера эффектов
   var filterPin = document.querySelector('.effect-level__pin');
@@ -150,7 +145,6 @@
       document.removeEventListener('mousemove', filterPinMouseMoveHandler);
       document.removeEventListener('mouseup', filterPinMouseUpHandler);
     };
-
     document.addEventListener('mousemove', filterPinMouseMoveHandler);
     document.addEventListener('mouseup', filterPinMouseUpHandler);
   });
@@ -169,7 +163,6 @@
     var ratio = calculateEffectDepth();
     effectLevelChanger(ratio);
   };
-
 
   // Фильтры
   var effectClassName;
@@ -196,7 +189,6 @@
     });
   };
   effectsListener();
-
 
   // Расчет глубины фильтров
   var calculateEffectDepth = function () {
@@ -225,7 +217,6 @@
     }
   };
 
-
   // Работа с отправкой формы
   var formRestoreDefault = function () {
     var file = document.querySelector('#upload-file');
@@ -247,7 +238,6 @@
     closePopup();
     window.utility.createMessage('error', 'Ошибка загрузки');
   };
-
 
   // Отображение загружаемой фотографии в превью
   var fileInput = document.querySelector('#upload-file');
