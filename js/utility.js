@@ -20,7 +20,9 @@
 
     var hideMessage = function (evt) {
       var target = evt.target;
-      if (target.classList.contains('error__button') || target.classList.contains('success__button') || isEscEvent(evt)) {
+      if (target.classList.contains('error__button')
+      || target.classList.contains('success__button')
+      || isEscEvent(evt)) {
         messageContainer.removeEventListener('click', hideMessage);
         document.addEventListener('click', hideMessage);
         messageContainer.parentElement.removeChild(messageContainer);

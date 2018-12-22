@@ -9,6 +9,7 @@
   var ARROW_RIGHT_KEY_CODE = 39;
   var ARROW_LEFT_KEY_CODE = 37;
 
+
   // Загрузка фотографий
   var commentTextArea = document.querySelector('.text__description');
   var hashtagsInput = document.querySelector('.text__hashtags');
@@ -49,6 +50,7 @@
     }
   });
 
+
   // Валидация форм
   var makeHashtagValidation = function (arr, target) {
     var outlineColorChanger = function (color) {
@@ -87,7 +89,7 @@
       target.setCustomValidity(makeHashtagValidation(hashArr, target));
     } else {
       target.setCustomValidity('');
-      target.style.outline = '';
+      target.removeAttribute('style');
     }
   };
   hashtagsInput.addEventListener('input', hashTagsInputHandler);
@@ -121,7 +123,6 @@
   var filterPin = document.querySelector('.effect-level__pin');
   var pinLine = document.querySelector('.effect-level__line');
   var effectLevelDepth = document.querySelector('.effect-level__depth');
-  // var imgUploadWrapper = document.querySelector('.img-upload__wrapper');
 
   filterPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -168,6 +169,7 @@
     var ratio = calculateEffectDepth();
     effectLevelChanger(ratio);
   };
+
 
   // Фильтры
   var effectClassName;
@@ -245,6 +247,7 @@
     closePopup();
     window.utility.createMessage('error', 'Ошибка загрузки');
   };
+
 
   // Отображение загружаемой фотографии в превью
   var fileInput = document.querySelector('#upload-file');
